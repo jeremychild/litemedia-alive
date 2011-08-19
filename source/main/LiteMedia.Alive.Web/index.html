@@ -1,0 +1,44 @@
+﻿<html>
+    <head>
+    <title>LiteMedia.Alive Test Application</title>
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+        google.load("visualization", "1", { packages: ["corechart"] });
+        google.setOnLoadCallback(drawChart);
+        function drawChart() {
+            var data = new google.visualization.DataTable();
+            data.addColumn('string', 'Minute')
+            data.addColumn('number', 'Active Sessions');
+            data.addRows(9);
+            data.setValue(0, 0, '0');
+            data.setValue(0, 1, 0);
+            data.setValue(1, 0, '1');
+            data.setValue(1, 1, 23);
+            data.setValue(2, 0, '2');
+            data.setValue(2, 1, 215);
+            data.setValue(3, 0, '3');
+            data.setValue(3, 1, 210);
+            data.setValue(4, 0, '4');
+            data.setValue(4, 1, 205);
+            data.setValue(5, 0, '5');
+            data.setValue(5, 1, 231);
+            data.setValue(6, 0, '6');
+            data.setValue(6, 1, 215);
+            data.setValue(7, 0, '7');
+            data.setValue(7, 1, 214);
+            data.setValue(8, 0, '8');
+            data.setValue(8, 1, 198);
+
+            var chart = new google.visualization.LineChart(document.getElementById('session-chart'));
+            chart.draw(data, { width: 400, height: 240, title: 'Current Sessions' });
+        }
+    </script>
+    </head>
+    <body>
+        <h1>LiteMedia.Alive Test Application</h1>
+        <p>
+            The purpose of this web application is to test the LiteMedia.Alive module and AXD-handler.
+        </p>
+        <div id="session-chart"></div>
+    </body>
+</html>

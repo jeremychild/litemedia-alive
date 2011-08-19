@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "LiteMedia.Alive", "main\LiteMedia.Alive\LiteMedia.Alive.fsproj", "{46D20295-B460-41BB-BBF8-03A58DB77829}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LiteMedia.Alive.Web", "main\LiteMedia.Alive.Web\LiteMedia.Alive.Web.csproj", "{614F2794-BEB8-4D00-BC4A-5B689843D706}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{013F72D0-F291-47C9-90CE-C69EB97C00BF}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "LiteMedia.Alive.Test", "test\LiteMedia.Alive.Test\LiteMedia.Alive.Test.fsproj", "{2DCF83FA-86F7-456F-9D46-8024AE51F383}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{46D20295-B460-41BB-BBF8-03A58DB77829}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{46D20295-B460-41BB-BBF8-03A58DB77829}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{46D20295-B460-41BB-BBF8-03A58DB77829}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{46D20295-B460-41BB-BBF8-03A58DB77829}.Release|Any CPU.Build.0 = Release|Any CPU
+		{614F2794-BEB8-4D00-BC4A-5B689843D706}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{614F2794-BEB8-4D00-BC4A-5B689843D706}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{614F2794-BEB8-4D00-BC4A-5B689843D706}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{614F2794-BEB8-4D00-BC4A-5B689843D706}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2DCF83FA-86F7-456F-9D46-8024AE51F383}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2DCF83FA-86F7-456F-9D46-8024AE51F383}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2DCF83FA-86F7-456F-9D46-8024AE51F383}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2DCF83FA-86F7-456F-9D46-8024AE51F383}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{2DCF83FA-86F7-456F-9D46-8024AE51F383} = {013F72D0-F291-47C9-90CE-C69EB97C00BF}
+	EndGlobalSection
+EndGlobal
