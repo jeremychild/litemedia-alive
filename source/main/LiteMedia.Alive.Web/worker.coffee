@@ -26,7 +26,7 @@ appendToState = (data) ->
 		# Create counter in state if it doesn't exist
 		state[counter.Name] = [] unless state[counter.Name]
 		# Limit the amount of values at 60, // TODO make this configurable
-		state[counter.Name].splice(0, 1) if state[counter.Name].length > 59
+		state[counter.Name].splice(0, 1) if state[counter.Name].length > 61
 		# Push the new counter value onto the array
 		state[counter.Name].push(counter.CurrentValue)
 	state

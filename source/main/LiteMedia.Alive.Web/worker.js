@@ -27,7 +27,7 @@
       if (!state[counter.Name]) {
         state[counter.Name] = [];
       }
-      if (state[counter.Name].length > 59) {
+      if (state[counter.Name].length > 61) {
         state[counter.Name].splice(0, 1);
       }
       state[counter.Name].push(counter.CurrentValue);
