@@ -12,12 +12,15 @@ process = (evt) ->
 	if not ongoingRequest
 		ongoingRequest = true
 		counters = {}
-		getData(evt.data.name, handleResponse)
+		getData(evt.data.name, handleResponse, failedResponse)
 	
 # Handle the counter response
 handleResponse = (responseData) ->
 	state = appendToState responseData
 	postMessage(name: responseData.Name, data: state)
+
+# Failed response
+failedResponse = (message) ->
 
 # Append the json response to state data
 appendToState = (data) -> 
@@ -35,7 +38,7 @@ appendToState = (data) ->
 getDataUrl = (name) -> '?data=' + name
 
 # Get the group data by name
-getData = (name, successCallback) ->
+getData = (name, successCallback, failureCallback) ->
 	result = {}
 	httpRequest = new XMLHttpRequest() if this.XMLHttpRequest?
 	httpRequest = new ActiveXObject("Microsoft.XMLHTTP") if this.ActiveXObject
@@ -45,13 +48,12 @@ getData = (name, successCallback) ->
 		try
 			if httpRequest.readyState is 4
 				if httpRequest.status is 200
-					log 'success: ' + name
-					successCallback(JSON.parse(httpRequest.responseText)) # if httpRequest.responseText? and not httpRequest.responseText = ''
+					successCallback(JSON.parse(httpRequest.responseText))
 				else
-					log 'There was a problem with the request'
+					failureCallback(httpRequest.responseText)
 				ongoingRequest = false
 		catch error
-			log 'Caught exception parsing json: ' + error.description
+			failureCallback()
 			ongoingRequest = false
 
 	httpRequest.open('GET', getDataUrl(name))
@@ -60,3 +62,4 @@ getData = (name, successCallback) ->
 
 # Bind worker onmessage to executing process with a certain interval
 this.onmessage = (evt) => setInterval((-> process(evt)), 50)
+#this.onmessage = (evt) => process(evt)

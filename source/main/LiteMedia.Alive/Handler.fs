@@ -70,10 +70,21 @@ type Handler() as this =
 
     let xn s = XName.Get(s)
 
+    let writeErrorResponse (response : HttpResponse) (exn : System.Exception) = 
+      System.Web.HttpContext.Current.Server.ClearError() |> ignore
+      response.TrySkipIisCustomErrors <- true
+      response.ContentType <- "text/plain"
+      response.StatusCode <- int (System.Net.HttpStatusCode.InternalServerError)
+      response.Write(exn.Message)
+
     let BuildSingleDataResponse (response : HttpResponse) group =
-      let result = group |> PerfMon.measureGroup
-      let serializer = new DataContractJsonSerializer(result.GetType())
-      serializer.WriteObject(response.OutputStream, result) |> ignore
+      try
+        let result = group |> PerfMon.measureGroup
+        let serializer = new DataContractJsonSerializer(result.GetType())
+        serializer.WriteObject(response.OutputStream, result) |> ignore
+      with
+        | :? PerfMon.NoSuchPerformanceCounterException as exn -> writeErrorResponse response exn
+        | :? System.TimeoutException as exn -> writeErrorResponse response exn
 
     interface IHttpHandler with
         member x.IsReusable = false

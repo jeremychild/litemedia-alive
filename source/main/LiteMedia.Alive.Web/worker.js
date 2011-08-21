@@ -1,5 +1,5 @@
 (function() {
-  var appendToState, getData, getDataUrl, handleResponse, log, ongoingRequest, process, state;
+  var appendToState, failedResponse, getData, getDataUrl, handleResponse, log, ongoingRequest, process, state;
   var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
   log = function(msg) {};
   state = {};
@@ -9,7 +9,7 @@
     if (!ongoingRequest) {
       ongoingRequest = true;
       counters = {};
-      return getData(evt.data.name, handleResponse);
+      return getData(evt.data.name, handleResponse, failedResponse);
     }
   };
   handleResponse = function(responseData) {
@@ -19,6 +19,7 @@
       data: state
     });
   };
+  failedResponse = function(message) {};
   appendToState = function(data) {
     var counter, _i, _len, _ref;
     _ref = data.Counters;
@@ -37,7 +38,7 @@
   getDataUrl = function(name) {
     return '?data=' + name;
   };
-  getData = function(name, successCallback) {
+  getData = function(name, successCallback, failureCallback) {
     var httpRequest, result;
     result = {};
     if (this.XMLHttpRequest != null) {
@@ -50,15 +51,14 @@
       try {
         if (httpRequest.readyState === 4) {
           if (httpRequest.status === 200) {
-            log('success: ' + name);
             successCallback(JSON.parse(httpRequest.responseText));
           } else {
-            log('There was a problem with the request');
+            failureCallback(httpRequest.responseText);
           }
           return ongoingRequest = false;
         }
       } catch (error) {
-        log('Caught exception parsing json: ' + error.description);
+        failureCallback();
         return ongoingRequest = false;
       }
     };

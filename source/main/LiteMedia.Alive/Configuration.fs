@@ -55,7 +55,7 @@ type CounterElement() =
         CategoryName = self.CategoryName; 
         CounterName = self.CounterName; 
         InstanceName = match self.InstanceName with | null -> None | name -> Some(name);
-        CurrentValue = 0.f
+        CurrentValue = 0.f;
     }
 
 [<ConfigurationCollection(typedefof<CounterElement>,CollectionType = ConfigurationElementCollectionType.BasicMap,AddItemName = Node.Counter)>]
@@ -81,7 +81,13 @@ type GroupElement() =
     let intParse = System.Int32.Parse
     member self.Name = self.name
     member self.UpdateLatency = self.updateLatency
-    member self.Model = { Name = self.Name; UpdateLatency = intParse(self.UpdateLatency); Counters = [| for i in self do yield i.Model |] }
+    member self.Model = 
+      { 
+        Name = self.Name; 
+        UpdateLatency = intParse(self.UpdateLatency); 
+//        DataRange = 0,100;
+        Counters = [| for i in self do yield i.Model |] 
+      }
 
     member self.toSeq =
         let enumerator = base.GetEnumerator()

@@ -9,15 +9,15 @@
     [<DataContract>]
     type Counter = { 
         [<field : DataMember(Name = "CategoryName")>]
-        CategoryName: string; 
+        CategoryName: string
         [<field : DataMember(Name = "CounterName")>]
-        CounterName: string; 
+        CounterName: string 
         [<field : DataMember(Name = "InstanceName")>]
-        InstanceName : string Option;
+        InstanceName : string Option
         [<field : DataMember(Name = "Name")>]
-        Name : string; 
+        Name : string
         [<field : DataMember(Name = "CurrentValue")>]
-        CurrentValue : float32 
+        CurrentValue : float32
     }
 
     [<DataContract>]
@@ -26,6 +26,8 @@
         Name : string
         [<field : DataMember(Name = "UpdateLatency")>]
         UpdateLatency : int
+//        [<field : DataMember(Name = "DataRange")>]
+//        DataRange : int * int
         [<field : DataMember(Name = "Counters")>] 
         Counters : Counter[] 
     }

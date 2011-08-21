@@ -49,6 +49,7 @@
     <EmbeddedResource Include="..\..\main\LiteMedia.Alive.Web\main.css">
       <Link>main.css</Link>
     </EmbeddedResource>
+    <Compile Include="AssemblyInfo.fs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />

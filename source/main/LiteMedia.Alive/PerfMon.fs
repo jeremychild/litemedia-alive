@@ -1,9 +1,12 @@
 ﻿namespace LiteMedia.Alive
 open Model
+open System
 open System.Diagnostics
 
 /// Performance monitor functionality
 module PerfMon =
+  exception NoSuchPerformanceCounterException of string
+
   /// How many milliseconds between samples
   let sampleDelay = 100
 
@@ -19,9 +22,13 @@ module PerfMon =
   ///          use(counter = factory())
   let counterFact groupName counterName instanceName =
     (fun () ->
-      match instanceName with
-      | Some name -> new PerformanceCounter(groupName, counterName, name, true)
-      | None ->  new PerformanceCounter(groupName, counterName, true))
+      try
+        match instanceName with
+        | Some name -> new PerformanceCounter(groupName, counterName, name, true)
+        | None ->  new PerformanceCounter(groupName, counterName, true)
+      with 
+        | :? InvalidOperationException as ex -> raise (NoSuchPerformanceCounterException(ex.Message))
+      )
 
   /// Measure the average of a counter over time
   /// time is under what amount of time we'll be measuring
@@ -32,7 +39,7 @@ module PerfMon =
     [0..samples - 1] |> sleepMap sampleDelay (fun x -> counter.NextValue())
                      |> List.average
                      |> round                     
-  
+
   /// Measure the number of discrete instances over time
   let measureNof time (counter : PerformanceCounter) =
     let value = lazy(counter.NextValue())
@@ -59,16 +66,18 @@ module PerfMon =
     { counter with CurrentValue = measure time (counterFact counter.CategoryName counter.CounterName counter.InstanceName) }
   
   /// Async version of measure the counter
+  /// Will set the counter to -1 on failure
   let measureCounterAsync time counter = 
     Async.FromContinuations(fun (cont, econt, ccont) ->
       try
         cont(measureCounter time counter)
       with
-        | ex -> printfn "Exception measuring counter: %s" ex.Message
+        // Does a better job communicating that the counter failed than an exception
+        | exn -> cont({ counter with CurrentValue = -1.f })
     )
 
   /// Measure the performance counters of the group
+  /// Measurement is done during the group.UpdateLatency time. This measurement is done asyncrously.
   let measureGroup group =
-    let mesurements = group.Counters |> Seq.map (measureCounterAsync group.UpdateLatency)
-    { group with Counters = Async.Parallel(mesurements) |> Async.RunSynchronously }
-    
+    let measurements = group.Counters |> Seq.map (measureCounterAsync group.UpdateLatency)
+    { group with Counters = Async.Parallel(measurements) |> Async.RunSynchronously }

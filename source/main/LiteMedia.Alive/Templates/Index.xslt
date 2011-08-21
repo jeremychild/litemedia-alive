@@ -29,7 +29,7 @@
         <footer>
           <p>
             Alive was created by <a href="">Mikael Lundin @ litemedia</a> and is free for use and <a href="">open source</a>.
-            If you want to contribute to this project you can <a href="http://fundedbyme.com/">donate money</a> or source code.
+            <!--If you want to contribute to this project you can <a href="http://fundedbyme.com/">donate money</a> or source code.-->
           </p>
         </footer>
       </body>

@@ -44,11 +44,18 @@ getArguments = (name, data) ->
 		# Chart title
 		chtt: escape(name),
 		# Chart data legends
-		chdl: (escape(counterName) for counterName, values of data).join('|'),
+		chdl: (counterName.replace(' ', '+') for counterName, values of data).join('|'),
 		# Chart data values
 		chd: 't:' + (values.join(',') for counterName, values of data).join('|'),
+		#chd: 's:' + (values.join(',') for counterName, values of simpleEncode(data, 100)).join('|'),
 		chls: 3,
 		chma: '5,5,5,25'
+		#chxr: '0,0,101,25'
 	
 	for key, value of arguments	
 		"#{key}=#{value}"
+
+simpleEncoding = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+simpleEncode = (valueArray, maxValue) ->
+	for num in valueArray
+		simpleEncoding.charAt(Math.round((simpleEncoding.length - 1) * currentValue / maxValue)) if currentValue? and currentValue >= 0

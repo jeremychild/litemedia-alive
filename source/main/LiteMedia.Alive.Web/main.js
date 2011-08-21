@@ -9,7 +9,7 @@
       'CPU': {},
       'Disc': {}
     }
-  */  var createChartUrl, data, dir, getArguments, log, name, worker, workers, _i, _j, _len, _len2;
+  */  var createChartUrl, data, dir, getArguments, log, name, simpleEncode, simpleEncoding, worker, workers, _i, _j, _len, _len2;
   var __hasProp = Object.prototype.hasOwnProperty;
   log = function(message) {
     if (typeof console !== "undefined" && console !== null) {
@@ -64,7 +64,7 @@
         _results = [];
         for (counterName in data) {
           values = data[counterName];
-          _results.push(escape(counterName));
+          _results.push(counterName.replace(' ', '+'));
         }
         return _results;
       })()).join('|'),
@@ -84,6 +84,16 @@
     for (key in arguments) {
       value = arguments[key];
       _results.push("" + key + "=" + value);
+    }
+    return _results;
+  };
+  simpleEncoding = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  simpleEncode = function(valueArray, maxValue) {
+    var num, _k, _len3, _results;
+    _results = [];
+    for (_k = 0, _len3 = valueArray.length; _k < _len3; _k++) {
+      num = valueArray[_k];
+      _results.push((typeof currentValue !== "undefined" && currentValue !== null) && currentValue >= 0 ? simpleEncoding.charAt(Math.round((simpleEncoding.length - 1) * currentValue / maxValue)) : void 0);
     }
     return _results;
   };
