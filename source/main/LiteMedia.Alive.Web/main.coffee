@@ -44,7 +44,7 @@ getArguments = (name, data) ->
 		# Chart title
 		chtt: escape(name),
 		# Chart data legends
-		chdl: (counterName.replace(' ', '+') for counterName, values of data).join('|'),
+		chdl: (escape(counterName) for counterName, values of data).join('|'),
 		# Chart data values
 		chd: 't:' + (values.join(',') for counterName, values of data).join('|'),
 		#chd: 's:' + (values.join(',') for counterName, values of simpleEncode(data, 100)).join('|'),

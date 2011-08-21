@@ -64,7 +64,7 @@
         _results = [];
         for (counterName in data) {
           values = data[counterName];
-          _results.push(counterName.replace(' ', '+'));
+          _results.push(escape(counterName));
         }
         return _results;
       })()).join('|'),
