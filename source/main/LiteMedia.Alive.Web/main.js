@@ -9,7 +9,7 @@
       'CPU': {},
       'Disc': {}
     }
-  */  var createChartUrl, data, dir, getArguments, log, name, simpleEncode, simpleEncoding, worker, workers, _i, _j, _len, _len2;
+  */  var createChartUrl, data, dir, getArguments, imageSize, log, name, simpleEncode, simpleEncoding, worker, workers, _i, _j, _len, _len2;
   var __hasProp = Object.prototype.hasOwnProperty;
   log = function(message) {
     if (typeof console !== "undefined" && console !== null) {
@@ -37,25 +37,36 @@
     }
     return _results;
   })();
+  imageSize = function() {
+    var margin, width;
+    margin = 60;
+    width = Math.round(window.innerWidth / 3) - margin;
+    return {
+      width: width,
+      height: Math.round(width / 2)
+    };
+  };
   for (_i = 0, _len = workers.length; _i < _len; _i++) {
     worker = workers[_i];
     worker.agent.onmessage = function(evt) {
-      return document.getElementById(evt.data.name).src = createChartUrl(evt.data.name, evt.data.data);
+      var image;
+      image = document.getElementById(evt.data.name);
+      return image.src = createChartUrl(evt.data.name, evt.data.data, imageSize());
     };
   }
   for (_j = 0, _len2 = workers.length; _j < _len2; _j++) {
     worker = workers[_j];
     worker.agent.postMessage(worker.meta);
   }
-  createChartUrl = function(name, data) {
-    return 'http://chart.googleapis.com/chart?' + (getArguments(name, data)).join('&');
+  createChartUrl = function(name, data, size) {
+    return 'http://chart.googleapis.com/chart?' + (getArguments(name, data, size)).join('&');
   };
-  getArguments = function(name, data) {
+  getArguments = function(name, data, size) {
     var counterName, key, value, values, _results;
     arguments = {
       chxs: '0,676767,11.5,0,l,000000',
       chxt: 'y',
-      chs: '440x220',
+      chs: size.width + 'x' + size.height,
       cht: 'lc',
       chco: '006666,339999,00CC99,66CCCC,00FFCC,33FFCC,66FFCC,99FFCC,CCFFFF',
       chtt: escape(name),

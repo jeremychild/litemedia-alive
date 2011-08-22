@@ -55,7 +55,10 @@ module PerfMon =
   /// Example: measure 1000 (counterFact "Processor Information" "% Processor Time" (Some("_Total")))
   let measure time (factory : unit -> PerformanceCounter) =
     use counter = factory()
-    (measureFn counter.CounterType) time counter
+    try
+      (measureFn counter.CounterType) time counter
+    finally
+      counter.Close()
 
   /// Measure average of counter
   /// time, during what time do you measure
