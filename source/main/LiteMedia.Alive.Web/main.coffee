@@ -1,9 +1,7 @@
 ###
   Author: Mikael Lundin
   E-mail: mikael.lundin@litemedia.se
-###
 
-###
   Something like this is defined before this script is run
   var charts = {
     'CPU': {},
@@ -25,11 +23,14 @@ imageSize = () ->
 	width = Math.round(window.innerWidth / 3) - margin
 	{ width: width, height: Math.round(width / 2) }
 
+# Update chart with [name] with [data]
+paintChart = (name, data) ->
+	image = document.getElementById(name)
+	image.src = createChartUrl(name, data, imageSize())
+
 # Register callback that alerts the message from worker, for now
 for worker in workers
-	worker.agent.onmessage = (evt) -> 
-		image = document.getElementById(evt.data.name)
-		image.src = createChartUrl(evt.data.name, evt.data.data, imageSize())
+	worker.agent.onmessage = (evt) -> paintChart(evt.data.name, evt.data.data)
 
 # Run all workers
 for worker in workers
@@ -54,15 +55,11 @@ getArguments = (name, data, size) ->
 		chdl: (escape(counterName) for counterName, values of data).join('|'),
 		# Chart data values
 		chd: 't:' + (values.join(',') for counterName, values of data).join('|'),
-		#chd: 's:' + (values.join(',') for counterName, values of simpleEncode(data, 100)).join('|'),
 		chls: 3,
 		chma: '5,5,5,25'
-		#chxr: '0,0,101,25'
 	
 	for key, value of arguments	
 		"#{key}=#{value}"
 
-simpleEncoding = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-simpleEncode = (valueArray, maxValue) ->
-	for num in valueArray
-		simpleEncoding.charAt(Math.round((simpleEncoding.length - 1) * currentValue / maxValue)) if currentValue? and currentValue >= 0
+# Paint the charts when page is finished loading
+document.onload = () => paintChart(name, values) for own name, values of charts

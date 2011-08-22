@@ -2,15 +2,14 @@
   /*
     Author: Mikael Lundin
     E-mail: mikael.lundin@litemedia.se
-  */
-  /*
+  
     Something like this is defined before this script is run
     var charts = {
       'CPU': {},
       'Disc': {}
     }
-  */  var createChartUrl, data, dir, getArguments, imageSize, log, name, simpleEncode, simpleEncoding, worker, workers, _i, _j, _len, _len2;
-  var __hasProp = Object.prototype.hasOwnProperty;
+  */  var createChartUrl, data, dir, getArguments, imageSize, log, name, paintChart, worker, workers, _i, _j, _len, _len2;
+  var __hasProp = Object.prototype.hasOwnProperty, __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
   log = function(message) {
     if (typeof console !== "undefined" && console !== null) {
       return console.log(message);
@@ -46,12 +45,15 @@
       height: Math.round(width / 2)
     };
   };
+  paintChart = function(name, data) {
+    var image;
+    image = document.getElementById(name);
+    return image.src = createChartUrl(name, data, imageSize());
+  };
   for (_i = 0, _len = workers.length; _i < _len; _i++) {
     worker = workers[_i];
     worker.agent.onmessage = function(evt) {
-      var image;
-      image = document.getElementById(evt.data.name);
-      return image.src = createChartUrl(evt.data.name, evt.data.data, imageSize());
+      return paintChart(evt.data.name, evt.data.data);
     };
   }
   for (_j = 0, _len2 = workers.length; _j < _len2; _j++) {
@@ -98,14 +100,14 @@
     }
     return _results;
   };
-  simpleEncoding = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  simpleEncode = function(valueArray, maxValue) {
-    var num, _k, _len3, _results;
+  document.onload = __bind(function() {
+    var name, values, _results;
     _results = [];
-    for (_k = 0, _len3 = valueArray.length; _k < _len3; _k++) {
-      num = valueArray[_k];
-      _results.push((typeof currentValue !== "undefined" && currentValue !== null) && currentValue >= 0 ? simpleEncoding.charAt(Math.round((simpleEncoding.length - 1) * currentValue / maxValue)) : void 0);
+    for (name in charts) {
+      if (!__hasProp.call(charts, name)) continue;
+      values = charts[name];
+      _results.push(paintChart(name, values));
     }
     return _results;
-  };
+  }, this);
 }).call(this);

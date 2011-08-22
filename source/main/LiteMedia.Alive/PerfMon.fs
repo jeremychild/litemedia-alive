@@ -76,11 +76,14 @@ module PerfMon =
         cont(measureCounter time counter)
       with
         // Does a better job communicating that the counter failed than an exception
-        | exn -> cont({ counter with CurrentValue = -1.f })
+        | exn -> 
+          Debug.WriteLine exn.Message
+          cont({ counter with CurrentValue = -1.f })
     )
-
+    
   /// Measure the performance counters of the group
   /// Measurement is done during the group.UpdateLatency time. This measurement is done asyncrously.
   let measureGroup group =
     let measurements = group.Counters |> Seq.map (measureCounterAsync group.UpdateLatency)
-    { group with Counters = Async.Parallel(measurements) |> Async.RunSynchronously }
+    //{ group with Counters = Async.Parallel(measurements) |> Async.RunSynchronously }
+    { group with Counters = Async.RunSynchronously(Async.Parallel(measurements), group.UpdateLatency * 2) }

@@ -63,7 +63,6 @@ type Handler() as this =
 
     let RawResponse (response : HttpResponse) path =
         // Add client caching here
-        Debug.WriteLine "RawResponse" |> ignore
         let fileStream = System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream(path)
         use reader = new System.IO.StreamReader(fileStream)
         response.Output.Write(reader.ReadToEnd())

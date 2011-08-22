@@ -47,7 +47,7 @@
   <xsl:template match="a:Model.Group" mode="json"><xsl:if test="not(position()=1)"><xsl:text>,</xsl:text></xsl:if>'<xsl:value-of select="a:Name"/>': { 'latency': <xsl:value-of select="a:UpdateLatency"/> }</xsl:template>
   <xsl:template match="a:Model.Group" mode="li">
     <li class="chart">
-      <img id="{name}" src="http://placekitten.com/g/440/220">
+      <img id="{name}" src="">
         <xsl:attribute name="id">
           <xsl:value-of select="a:Name"/>
         </xsl:attribute>
@@ -59,52 +59,4 @@
       <xsl:apply-templates select="@* | node()"/>
     </xsl:copy>
   </xsl:template>-->
-  <!--<ArrayOfModel.Group xmlns="http://schemas.datacontract.org/2004/07/" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-    <Model.Group>
-      <Counters>
-        <Model.Counter>
-          <CategoryName>Processor Information</CategoryName>
-          <CounterName>% Processor Time</CounterName>
-          <CurrentValue>0</CurrentValue>
-          <InstanceName xmlns:a="http://schemas.datacontract.org/2004/07/Microsoft.FSharp.Core">
-            <a:value>_Total</a:value>
-          </InstanceName>
-          <Name>CPU</Name>
-        </Model.Counter>
-        <Model.Counter>
-          <CategoryName>Processor Information</CategoryName>
-          <CounterName>% Processor Time</CounterName>
-          <CurrentValue>0</CurrentValue>
-          <InstanceName xmlns:a="http://schemas.datacontract.org/2004/07/Microsoft.FSharp.Core">
-            <a:value>0,1</a:value>
-          </InstanceName>
-          <Name>CPU#1</Name>
-        </Model.Counter>
-        <Model.Counter>
-          <CategoryName>Processor Information</CategoryName>
-          <CounterName>% Processor Time</CounterName>
-          <CurrentValue>0</CurrentValue>
-          <InstanceName xmlns:a="http://schemas.datacontract.org/2004/07/Microsoft.FSharp.Core">
-            <a:value>0,1</a:value>
-          </InstanceName>
-          <Name>CPU#2</Name>
-        </Model.Counter>
-      </Counters>
-      <Name>Hardware</Name>
-    </Model.Group>
-    <Model.Group>
-      <Counters>
-        <Model.Counter>
-          <CategoryName>Paging File</CategoryName>
-          <CounterName>% Usage</CounterName>
-          <CurrentValue>0</CurrentValue>
-          <InstanceName xmlns:a="http://schemas.datacontract.org/2004/07/Microsoft.FSharp.Core">
-            <a:value>_Total</a:value>
-          </InstanceName>
-          <Name>Paging File % Usage</Name>
-        </Model.Counter>
-      </Counters>
-      <Name>Swap</Name>
-    </Model.Group>
-  </ArrayOfModel.Group>-->
 </xsl:stylesheet>
