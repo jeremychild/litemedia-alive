@@ -27,6 +27,7 @@ imageSize = () ->
 paintChart = (name, data) ->
 	image = document.getElementById(name)
 	image.src = createChartUrl(name, data, imageSize())
+	#litemedia.alive.chart.paint(document.getElementById('c' + name), data)
 
 # Register callback that alerts the message from worker, for now
 for worker in workers

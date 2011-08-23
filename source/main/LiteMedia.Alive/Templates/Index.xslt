@@ -11,6 +11,7 @@
         <script>
           <xsl:call-template name="configuration" />
         </script>
+        <script src="?file=chart.js"></script>
         <script src="?file=main.js"></script>
       </head>
       <body>
@@ -52,6 +53,9 @@
           <xsl:value-of select="a:Name"/>
         </xsl:attribute>
       </img>
+      <canvas id="c{name}">
+        You need a browser that support the &lt;canvas&gt; element.
+      </canvas>
     </li>
   </xsl:template>
   <!--<xsl:template match="@* | node()">

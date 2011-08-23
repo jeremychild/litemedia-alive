@@ -44,6 +44,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="chart.js">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>chart.coffee</DependentUpon>
+    </Content>
     <Content Include="Global.asax" />
     <Content Include="index.html" />
     <Content Include="main.css">
@@ -69,12 +74,16 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Main\LiteMedia.Alive\LiteMedia.Alive.fsproj">
+    <ProjectReference Include="..\LiteMedia.Alive\LiteMedia.Alive %28v4.0%29.fsproj">
       <Project>{46D20295-B460-41BB-BBF8-03A58DB77829}</Project>
-      <Name>LiteMedia.Alive</Name>
+      <Name>LiteMedia.Alive %28v4.0%29</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="chart.coffee">
+      <Generator>CoffeeScriptGenerator</Generator>
+      <LastGenOutput>chart.js</LastGenOutput>
+    </None>
     <None Include="main.coffee">
       <Generator>CoffeeScriptGenerator</Generator>
       <LastGenOutput>main.js</LastGenOutput>
