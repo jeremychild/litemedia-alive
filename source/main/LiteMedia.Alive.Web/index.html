@@ -1,8 +1,19 @@
 ﻿<html>
     <head>
         <title>LiteMedia.Alive development</title>
+        <script src="/Alive.axd/?file=chart.js"></script>
+        <script>
+            function draw() {
+                var canvas = document.getElementById('myCanvas');
+                var data = {}
+                paint(canvas, data);
+            }
+        </script>
     </head>
-    <body>
+    <body onload="draw();">
+        <canvas id="myCanvas">
+            You need a browser that support the &lt;canvas&gt; element.          
+        </canvas>
         <a href="/Alive.axd/">Start</a>
     </body>
 </html>
