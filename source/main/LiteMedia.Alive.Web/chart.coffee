@@ -1,5 +1,11 @@
 margin = 10
 
+# Grid color
+base_color = '#AFAFAF' 
+
+# Graph colors
+graph_colors = ['#006666','#339999','#00CC99','#66CCCC','#00FFCC','#33FFCC','#66FFCC','#99FFCC','#CCFFFF']
+
 # get max value of graph, 100 is minimal
 getMax = (data) ->
 	max = 100
@@ -16,20 +22,25 @@ xStep = (size, length) -> Math.round((size.width - margin) / length)
 # paint one graph on the canvas
 # todo, use quadratic curves?
 graph = (context, size, data, max, color) ->
-	context.beginPath()
-	context.moveTo(margin, size.height - margin) # 0, 0
-	x = margin
-	step = xStep size, data.length
 	scaler = yScaler size, 100
-	for item in data
+	step = xStep size, data.length
+	x = margin
+	y = size.height - margin - Math.round(item * scaler)
+	context.beginPath()
+	context.moveTo(x, y) # start
+	console.log('color:' + color)
+	context.strokeStyle = color
+	for item in data[1..data.length]
 		x += step
-		y = (size.height - margin) - Math.round(item * scaler)
-		console.log('x:' + x + ', y:' + y)
+		y = size.height - margin - Math.round(item * scaler)
+		console.log("x: #{x}, y:#{y}")
 		context.lineTo(x, y)		
 	context.stroke()
 
 # paint grids
 grids = (context, size) ->
+	context.strokeStyle = base_color
+	context.lineWidth = 1
 	context.beginPath()
 	context.moveTo(margin, margin)
 	context.lineTo(margin, size.height - margin)
@@ -39,8 +50,13 @@ grids = (context, size) ->
 # inner function
 paintMore = (context, size, data) ->
 	grids(context, size)
-	graph(context, size, [1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89], 100, '')
-	
+	i = 0
+	context.lineWidth = 2 # first line is heavy
+	for own name, values of data
+		graph(context, size, values, 100, graph_colors[i++])
+		context.lineWidth = 1 # light weight on lines 2..
+
+# get size of the canvas
 size = (canvas) -> width: canvas.width, height: canvas.height
 
 # Entry function for painting chart
