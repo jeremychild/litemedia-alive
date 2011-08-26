@@ -1,17 +1,47 @@
+class Chart
+	constructor: () ->
+	log10: (val) -> Math.log(val) / Math.log(10)
+	getMax: (data) ->
+		max = 100
+		for n in data
+			max = Math.max(max, n)
+		ceil = Math.pow(10, Math.ceil(log10(max)))
+		console.log(ceil)
+		if (ceil / 2) > max then ceil / 2 else ceil
+
+# global instance
+window.chart = new Chart()
+
 margin = top: 10, right: 0, bottom: 10, left: 25
 
 # Grid color
-base_color = '#AFAFAF' 
+base_color = '#606060' 
 
 # Graph colors
 graph_colors = ['#006666','#339999','#00CC99','#66CCCC','#00FFCC','#33FFCC','#66FFCC','#99FFCC','#CCFFFF']
 
+# log10
+log10 = (val) -> Math.log(val) / Math.log(10)
+
 # get max value of graph, 100 is minimal
+# example: getMax [99] -> 100
+# example: getMax [101] -> 250
+# example: getMax [251] -> 500
+# example: getMax [501] -> 1000
 getMax = (data) ->
 	max = 100
+	console.log("data: #{data}")
 	for n in data
+		console.log("n: #{n}")
 		max = Math.max(max, n)
-	max
+	console.log("max: #{max}")
+	ceil = Math.pow(10, Math.ceil(log10(max)))
+	if (ceil / 4) > max
+		ceil / 4
+	else if (ceil / 2) > max
+		ceil / 2
+	else
+		max
 
 # Get the scaler of y
 yScaler = (size, max) -> (size.height - margin.top - margin.bottom) / max
@@ -48,8 +78,9 @@ grids = (context, size) ->
 	context.lineTo(margin.left, size.height - margin.bottom)
 	context.lineTo(size.width - margin.right, size.height - margin.bottom)
 	context.stroke()
+
 	# Grid text
-	context.font = '9pt Arial'
+	context.font = '8.5pt Arial'
 	context.textAlign = 'center'
 	context.fillText('0', margin.left / 2, size.height - (margin.bottom / 2))
 	context.fillText('50', margin.left / 2, size.height / 2)
@@ -59,10 +90,11 @@ grids = (context, size) ->
 paintMore = (context, size, data) ->
 	grids(context, size)
 	i = 0
-	context.lineWidth = 1.5 # first line is heavy
+	context.lineWidth = 2 # first line is heavy
 	for own name, values of data
+		console.log(getMax values)
 		graph(context, size, values, 100, graph_colors[i++])
-		context.lineWidth = 1 # light weight on lines 2..
+		context.lineWidth = 1.5 # light weight on lines 2..
 
 # get size of the canvas
 size = (canvas) -> width: canvas.width, height: canvas.height

@@ -1,22 +1,58 @@
 (function() {
-  var base_color, getMax, graph, graph_colors, grids, margin, paintMore, size, xStep, yScaler;
+  var Chart, base_color, getMax, graph, graph_colors, grids, log10, margin, paintMore, size, xStep, yScaler;
   var __hasProp = Object.prototype.hasOwnProperty, __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+  Chart = (function() {
+    function Chart() {}
+    Chart.prototype.log10 = function(val) {
+      return Math.log(val) / Math.log(10);
+    };
+    Chart.prototype.getMax = function(data) {
+      var ceil, max, n, _i, _len;
+      max = 100;
+      for (_i = 0, _len = data.length; _i < _len; _i++) {
+        n = data[_i];
+        max = Math.max(max, n);
+      }
+      ceil = Math.pow(10, Math.ceil(log10(max)));
+      console.log(ceil);
+      if ((ceil / 2) > max) {
+        return ceil / 2;
+      } else {
+        return ceil;
+      }
+    };
+    return Chart;
+  })();
+  window.chart = new Chart();
   margin = {
     top: 10,
     right: 0,
     bottom: 10,
     left: 25
   };
-  base_color = '#AFAFAF';
+  base_color = '#606060';
   graph_colors = ['#006666', '#339999', '#00CC99', '#66CCCC', '#00FFCC', '#33FFCC', '#66FFCC', '#99FFCC', '#CCFFFF'];
+  log10 = function(val) {
+    return Math.log(val) / Math.log(10);
+  };
   getMax = function(data) {
-    var max, n, _i, _len;
+    var ceil, max, n, _i, _len;
     max = 100;
+    console.log("data: " + data);
     for (_i = 0, _len = data.length; _i < _len; _i++) {
       n = data[_i];
+      console.log("n: " + n);
       max = Math.max(max, n);
     }
-    return max;
+    console.log("max: " + max);
+    ceil = Math.pow(10, Math.ceil(log10(max)));
+    if ((ceil / 4) > max) {
+      return ceil / 4;
+    } else if ((ceil / 2) > max) {
+      return ceil / 2;
+    } else {
+      return max;
+    }
   };
   yScaler = function(size, max) {
     return (size.height - margin.top - margin.bottom) / max;
@@ -54,7 +90,7 @@
     context.lineTo(margin.left, size.height - margin.bottom);
     context.lineTo(size.width - margin.right, size.height - margin.bottom);
     context.stroke();
-    context.font = '9pt Arial';
+    context.font = '8.5pt Arial';
     context.textAlign = 'center';
     context.fillText('0', margin.left / 2, size.height - (margin.bottom / 2));
     context.fillText('50', margin.left / 2, size.height / 2);
@@ -64,13 +100,14 @@
     var i, name, values, _results;
     grids(context, size);
     i = 0;
-    context.lineWidth = 1.5;
+    context.lineWidth = 2;
     _results = [];
     for (name in data) {
       if (!__hasProp.call(data, name)) continue;
       values = data[name];
+      console.log(getMax(values));
       graph(context, size, values, 100, graph_colors[i++]);
-      _results.push(context.lineWidth = 1);
+      _results.push(context.lineWidth = 1.5);
     }
     return _results;
   };
