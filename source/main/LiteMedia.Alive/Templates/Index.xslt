@@ -10,6 +10,12 @@
         <link href="?file=main.css" rel="stylesheet" type="text/css" />
         <script>
           <xsl:call-template name="configuration" />
+
+          var settings = {
+            margin: { top: 10, right: 0, bottom: 10, left: 25 },
+            base_color: '#606060',
+            graph_colors: ['#006666', '#339999', '#00CC99', '#66CCCC', '#00FFCC', '#33FFCC', '#66FFCC', '#99FFCC', '#CCFFFF']
+          };
         </script>
         <script src="?file=chart.js"></script>
         <script src="?file=main.js"></script>
@@ -48,12 +54,15 @@
   <xsl:template match="a:Model.Group" mode="json"><xsl:if test="not(position()=1)"><xsl:text>,</xsl:text></xsl:if>'<xsl:value-of select="a:Name"/>': { 'latency': <xsl:value-of select="a:UpdateLatency"/> }</xsl:template>
   <xsl:template match="a:Model.Group" mode="li">
     <li class="chart">
-      <img id="{name}" src="">
+      <!--<img id="{name}" src="">
         <xsl:attribute name="id">
           <xsl:value-of select="a:Name"/>
         </xsl:attribute>
-      </img>
+      </img>-->
       <canvas id="c{name}">
+        <xsl:attribute name="id">
+          <xsl:value-of select="a:Name"/>
+        </xsl:attribute>
         You need a browser that support the &lt;canvas&gt; element.
       </canvas>
     </li>

@@ -4,3 +4,4 @@ source/_ReSharper.LiteMedia.Alive
 .suo
 /bin/
 /obj/
+Build/
