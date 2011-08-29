@@ -30,7 +30,11 @@
       return (size.height - this.margin.top - this.margin.bottom) / max;
     };
     Chart.prototype.xStep = function(size, length) {
-      return Math.round((size.width - this.margin.top - this.margin.bottom) / length);
+      if (length > 0) {
+        return (size.width - this.margin.top - this.margin.bottom) / (length - 1);
+      } else {
+        return 0;
+      }
     };
     Chart.prototype.graph = function(context, size, data, max, color) {
       var item, scaler, step, x, y, _i, _len, _ref;
@@ -50,7 +54,7 @@
       }
       return context.stroke();
     };
-    Chart.prototype.grids = function(context, size) {
+    Chart.prototype.grids = function(context, size, max) {
       context.fillStyle = this.base_color;
       context.strokeStyle = this.base_color;
       context.lineWidth = 1;
@@ -62,19 +66,25 @@
       context.font = '8.5pt Arial';
       context.textAlign = 'center';
       context.fillText('0', this.margin.left / 2, size.height - (this.margin.bottom / 2));
-      context.fillText('50', this.margin.left / 2, size.height / 2);
-      return context.fillText('100', this.margin.left / 2, 15);
+      context.fillText(max / 2, this.margin.left / 2, size.height / 2);
+      return context.fillText(max, this.margin.left / 2, 15);
     };
     Chart.prototype.paintMore = function(context, size, data) {
-      var i, name, values, _results;
-      this.grids(context, size);
+      var i, max, name, values, _results;
+      max = 100;
+      for (name in data) {
+        if (!__hasProp.call(data, name)) continue;
+        values = data[name];
+        max = Math.max(max, this.getMax(values));
+      }
+      this.grids(context, size, max);
       i = 0;
       context.lineWidth = 2;
       _results = [];
       for (name in data) {
         if (!__hasProp.call(data, name)) continue;
         values = data[name];
-        this.graph(context, size, values, 100, this.graph_colors[i++]);
+        this.graph(context, size, values, max, this.graph_colors[i++]);
         _results.push(context.lineWidth = 1.5);
       }
       return _results;
@@ -85,11 +95,14 @@
         height: canvas.height
       };
     };
+    Chart.prototype.clear = function(context) {
+      return context.clearRect(0, 0, context.canvas.width, context.canvas.height);
+    };
     Chart.prototype.paint = function(canvas, data) {
       var context;
       context = canvas.getContext('2d');
+      this.clear(context);
       if (context != null) {
-        context.clearRect(0, 0, context.canvas.width, context.canvas.height);
         return this.paintMore(context, this.size(canvas), data);
       } else {
         ;

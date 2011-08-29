@@ -27,7 +27,8 @@ root.Chart = class Chart
 	yScaler: (size, max) -> (size.height - @margin.top - @margin.bottom) / max
 
 	# Get number of pixels between discrete x
-	xStep: (size, length) -> Math.round((size.width - @margin.top - @margin.bottom) / length)
+	xStep: (size, length) -> 
+		if length > 0 then (size.width - @margin.top - @margin.bottom) / (length - 1) else 0
 
 	# paint one graph on the canvas
 	# todo, use quadratic curves?
@@ -46,7 +47,7 @@ root.Chart = class Chart
 		context.stroke()
 
 	# paint grids
-	grids: (context, size) ->
+	grids: (context, size, max) ->
 		context.fillStyle = @base_color
 		context.strokeStyle = @base_color
 		context.lineWidth = 1
@@ -60,27 +61,34 @@ root.Chart = class Chart
 		context.font = '8.5pt Arial'
 		context.textAlign = 'center'
 		context.fillText('0', @margin.left / 2, size.height - (@margin.bottom / 2))
-		context.fillText('50', @margin.left / 2, size.height / 2)
-		context.fillText('100', @margin.left / 2, 15)
+		context.fillText(max / 2, @margin.left / 2, size.height / 2)
+		context.fillText(max, @margin.left / 2, 15)
 
 	# inner function
 	paintMore: (context, size, data) ->
-		@grids(context, size)
+		# calculate max
+		max = 100
+		for own name, values of data
+			max = Math.max(max, @getMax(values))
+
+		@grids(context, size, max)
 		i = 0
 		context.lineWidth = 2 # first line is heavy
 		for own name, values of data
-			@graph(context, size, values, 100, @graph_colors[i++])
+			@graph(context, size, values, max, @graph_colors[i++])
 			context.lineWidth = 1.5 # light weight on lines 2..
 
 	# get size of the canvas
 	size: (canvas) -> width: canvas.width, height: canvas.height
 
+	# clear canvas
+	clear: (context) -> context.clearRect(0,0,context.canvas.width,context.canvas.height)
+
 	# Entry function for painting chart
 	paint: (canvas, data) ->
 		context = canvas.getContext('2d')
+		@clear(context)
 		if context?
-			# clear canvas
-			context.clearRect(0,0,context.canvas.width,context.canvas.height)
 			@paintMore(context, @size(canvas), data)
 		else
 			# error handling
