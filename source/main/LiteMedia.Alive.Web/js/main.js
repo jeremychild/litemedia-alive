@@ -61,4 +61,11 @@
     worker = workers[_j];
     worker.agent.postMessage(worker.meta);
   }
+  window.initialize = function() {
+    /*
+      for el in document.getElementsByClass('chart')
+        el.width = imageSize().width
+        el.height = imageSize().height
+      */
+  };
 }).call(this);

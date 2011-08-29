@@ -20,7 +20,7 @@
         <script src="?file=chart.js"></script>
         <script src="?file=main.js"></script>
       </head>
-      <body>
+      <body onload="window.initialize();">
         <article>
           <header>
             <h1>
@@ -53,13 +53,8 @@
   </xsl:template>
   <xsl:template match="a:Model.Group" mode="json"><xsl:if test="not(position()=1)"><xsl:text>,</xsl:text></xsl:if>'<xsl:value-of select="a:Name"/>': { 'latency': <xsl:value-of select="a:UpdateLatency"/> }</xsl:template>
   <xsl:template match="a:Model.Group" mode="li">
-    <li class="chart">
-      <!--<img id="{name}" src="">
-        <xsl:attribute name="id">
-          <xsl:value-of select="a:Name"/>
-        </xsl:attribute>
-      </img>-->
-      <canvas id="c{name}">
+    <li>
+      <canvas width="440" height="220" class="chart">
         <xsl:attribute name="id">
           <xsl:value-of select="a:Name"/>
         </xsl:attribute>

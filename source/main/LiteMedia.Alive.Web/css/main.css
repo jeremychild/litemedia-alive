@@ -15,11 +15,10 @@ h1 {
 
 ul.charts {
   list-style-type: none; }
-
-.chart {
-  float: left;
-  margin-right: 24px;
-  marign-bottom: 24px; }
+  ul.charts li {
+    float: left;
+    margin-right: 24px;
+    marign-bottom: 24px; }
 
 footer {
   clear: left; }

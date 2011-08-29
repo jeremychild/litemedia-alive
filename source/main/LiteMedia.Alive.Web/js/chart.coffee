@@ -33,7 +33,7 @@ root.Chart = class Chart
 	# paint one graph on the canvas
 	# todo, use quadratic curves?
 	graph: (context, size, data, max, color) ->
-		scaler = @yScaler size, 100
+		scaler = @yScaler size, max
 		step = @xStep size, data.length
 		x = @margin.left
 		y = size.height - @margin.bottom - Math.round(data[0] * scaler)

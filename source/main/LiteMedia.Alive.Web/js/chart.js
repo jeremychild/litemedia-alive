@@ -38,7 +38,7 @@
     };
     Chart.prototype.graph = function(context, size, data, max, color) {
       var item, scaler, step, x, y, _i, _len, _ref;
-      scaler = this.yScaler(size, 100);
+      scaler = this.yScaler(size, max);
       step = this.xStep(size, data.length);
       x = this.margin.left;
       y = size.height - this.margin.bottom - Math.round(data[0] * scaler);
