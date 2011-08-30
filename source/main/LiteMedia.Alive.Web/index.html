@@ -4,7 +4,6 @@
         <script src="/Alive.axd/?file=chart.js"></script>
         <script>
             var settings = {
-                margin: { top: 10, right: 0, bottom: 10, left: 25 },
                 base_color: '#606060',
                 graph_colors: ['#006666', '#339999', '#00CC99', '#66CCCC', '#00FFCC', '#33FFCC', '#66FFCC', '#99FFCC', '#CCFFFF']
             };
@@ -17,7 +16,7 @@
                     'CPU #2': [45.1,43,55,36.5,60.5,35.9,50,42.2,46.9,48.5,41.7,57.3,62.4,49.4,102]
                 }
                 var chart = new Chart(settings);
-                chart.paint(canvas, data);
+                chart.paint(canvas, 'Hardware', data);
             }
         </script>
     </head>

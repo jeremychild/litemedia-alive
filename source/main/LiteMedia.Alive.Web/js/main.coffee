@@ -30,7 +30,7 @@ imageSize = () ->
 paintChart = (name, data) ->	
 	# NOTE requires that settings has been defined
 	chart = new root.Chart(settings)
-	chart.paint(document.getElementById(name), data)
+	chart.paint(document.getElementById(name), name, data)
 
 # Register callback that alerts the message from worker, for now
 for worker in workers

@@ -49,7 +49,7 @@
   paintChart = function(name, data) {
     var chart;
     chart = new root.Chart(settings);
-    return chart.paint(document.getElementById(name), data);
+    return chart.paint(document.getElementById(name), name, data);
   };
   for (_i = 0, _len = workers.length; _i < _len; _i++) {
     worker = workers[_i];

@@ -5,9 +5,14 @@
   root.Chart = Chart = (function() {
     function Chart(settings) {
       this.settings = settings;
-      this.margin = this.settings.margin;
       this.base_color = this.settings.base_color;
       this.graph_colors = this.settings.graph_colors;
+      this.margin = {
+        top: 10,
+        right: 0,
+        bottom: 10,
+        left: 25
+      };
     }
     Chart.prototype.log10 = function(val) {
       return Math.log(val) / Math.log(10);
@@ -69,8 +74,15 @@
       context.fillText(max / 2, this.margin.left / 2, size.height / 2);
       return context.fillText(max, this.margin.left / 2, 15);
     };
-    Chart.prototype.paintMore = function(context, size, data) {
-      var i, max, name, values, _results;
+    Chart.prototype.gridTitle = function(context, size, title) {
+      var x;
+      x = (size.width / 2) + (this.margin.left - this.margin.right);
+      context.font = '12pt Arial';
+      context.textAlign = 'center';
+      return context.fillText(title, this.margin.top, x);
+    };
+    Chart.prototype.paintMore = function(context, name, data, size) {
+      var i, max, values, _results;
       max = 100;
       for (name in data) {
         if (!__hasProp.call(data, name)) continue;
@@ -78,6 +90,7 @@
         max = Math.max(max, this.getMax(values));
       }
       this.grids(context, size, max);
+      this.gridTitle(context, size, name);
       i = 0;
       context.lineWidth = 2;
       _results = [];
@@ -98,12 +111,12 @@
     Chart.prototype.clear = function(context) {
       return context.clearRect(0, 0, context.canvas.width, context.canvas.height);
     };
-    Chart.prototype.paint = function(canvas, data) {
+    Chart.prototype.paint = function(canvas, name, data) {
       var context;
       context = canvas.getContext('2d');
       this.clear(context);
       if (context != null) {
-        return this.paintMore(context, this.size(canvas), data);
+        return this.paintMore(context, name, data, this.size(canvas));
       } else {
         ;
       }

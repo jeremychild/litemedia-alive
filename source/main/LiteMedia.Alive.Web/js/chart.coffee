@@ -5,9 +5,11 @@ root = exports ? this
 root.Chart = class Chart
 	# create new instance of chart
 	constructor: (@settings) ->
-		@margin =  @settings.margin
 		@base_color = @settings.base_color
 		@graph_colors = @settings.graph_colors
+
+		# margin is not a setting because it could potentially break the chart
+		@margin =  top: 10, right: 0, bottom: 10, left: 25
 
 	# good enough log10 function
 	log10: (val) -> Math.log(val) / Math.log(10)
@@ -64,14 +66,22 @@ root.Chart = class Chart
 		context.fillText(max / 2, @margin.left / 2, size.height / 2)
 		context.fillText(max, @margin.left / 2, 15)
 
+	# top text
+	gridTitle: (context, size, title) ->
+		x = (size.width / 2) + (@margin.left - @margin.right)
+		context.font = '12pt Arial'
+		context.textAlign = 'center'
+		context.fillText(title, @margin.top, x)
+
 	# inner function
-	paintMore: (context, size, data) ->
+	paintMore: (context, name, data, size) ->
 		# calculate max
 		max = 100
 		for own name, values of data
 			max = Math.max(max, @getMax(values))
-
+		console.log(name)
 		@grids(context, size, max)
+		@gridTitle(context, size, name)
 		i = 0
 		context.lineWidth = 2 # first line is heavy
 		for own name, values of data
@@ -85,10 +95,10 @@ root.Chart = class Chart
 	clear: (context) -> context.clearRect(0,0,context.canvas.width,context.canvas.height)
 
 	# Entry function for painting chart
-	paint: (canvas, data) ->
+	paint: (canvas, name, data) ->
 		context = canvas.getContext('2d')
 		@clear(context)
 		if context?
-			@paintMore(context, @size(canvas), data)
+			@paintMore(context, name, data, @size(canvas))
 		else
 			# error handling
