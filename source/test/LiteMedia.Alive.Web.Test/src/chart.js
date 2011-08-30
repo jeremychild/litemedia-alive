@@ -9,7 +9,7 @@
       this.graph_colors = this.settings.graph_colors;
       this.margin = {
         top: 10,
-        right: 0,
+        right: 80,
         bottom: 10,
         left: 25
       };
@@ -36,7 +36,7 @@
     };
     Chart.prototype.xStep = function(size, length) {
       if (length > 0) {
-        return (size.width - this.margin.top - this.margin.bottom) / (length - 1);
+        return (size.width - this.margin.left - this.margin.right) / (length - 1);
       } else {
         return 0;
       }
@@ -59,7 +59,7 @@
       }
       return context.stroke();
     };
-    Chart.prototype.grids = function(context, size, max) {
+    Chart.prototype.gridLines = function(context, size, max) {
       context.fillStyle = this.base_color;
       context.strokeStyle = this.base_color;
       context.lineWidth = 1;
@@ -77,9 +77,41 @@
     Chart.prototype.gridTitle = function(context, size, title) {
       var x;
       x = (size.width / 2) + (this.margin.left - this.margin.right);
+      console.log(size);
+      console.log(x);
+      console.log(title);
       context.font = '12pt Arial';
       context.textAlign = 'center';
-      return context.fillText(title, this.margin.top, x);
+      return context.fillText(title, x, this.margin.top * 2);
+    };
+    Chart.prototype.gridLegends = function(series) {};
+    Chart.prototype.dataSeries = function(data) {
+      var name, values, _results;
+      _results = [];
+      for (name in data) {
+        if (!__hasProp.call(data, name)) continue;
+        values = data[name];
+        _results.push(name);
+      }
+      return _results;
+    };
+    Chart.prototype.dataValues = function(data) {
+      var name, value, values, _results;
+      _results = [];
+      for (name in data) {
+        if (!__hasProp.call(data, name)) continue;
+        values = data[name];
+        _results.push((function() {
+          var _i, _len, _results2;
+          _results2 = [];
+          for (_i = 0, _len = values.length; _i < _len; _i++) {
+            value = values[_i];
+            _results2.push(value);
+          }
+          return _results2;
+        })());
+      }
+      return _results;
     };
     Chart.prototype.paintMore = function(context, name, data, size) {
       var i, max, values, _results;
@@ -89,8 +121,9 @@
         values = data[name];
         max = Math.max(max, this.getMax(values));
       }
-      this.grids(context, size, max);
+      this.gridLines(context, size, max);
       this.gridTitle(context, size, name);
+      this.gridLegends(this.dataSeries(data));
       i = 0;
       context.lineWidth = 2;
       _results = [];

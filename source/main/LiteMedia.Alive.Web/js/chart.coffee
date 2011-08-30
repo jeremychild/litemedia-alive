@@ -9,7 +9,7 @@ root.Chart = class Chart
 		@graph_colors = @settings.graph_colors
 
 		# margin is not a setting because it could potentially break the chart
-		@margin =  top: 10, right: 0, bottom: 10, left: 25
+		@margin =  top: 10, right: 80, bottom: 10, left: 25
 
 	# good enough log10 function
 	log10: (val) -> Math.log(val) / Math.log(10)
@@ -30,7 +30,7 @@ root.Chart = class Chart
 
 	# Get number of pixels between discrete x
 	xStep: (size, length) -> 
-		if length > 0 then (size.width - @margin.top - @margin.bottom) / (length - 1) else 0
+		if length > 0 then (size.width - @margin.left - @margin.right) / (length - 1) else 0
 
 	# paint one graph on the canvas
 	# todo, use quadratic curves?
@@ -49,7 +49,7 @@ root.Chart = class Chart
 		context.stroke()
 
 	# paint grids
-	grids: (context, size, max) ->
+	gridLines: (context, size, max) ->
 		context.fillStyle = @base_color
 		context.strokeStyle = @base_color
 		context.lineWidth = 1
@@ -71,7 +71,21 @@ root.Chart = class Chart
 		x = (size.width / 2) + (@margin.left - @margin.right)
 		context.font = '12pt Arial'
 		context.textAlign = 'center'
-		context.fillText(title, @margin.top, x)
+		context.fillText(title, x, @margin.top * 2)
+
+	# paint the legends of data series with color
+	gridLegends: (context, size, series) ->
+		margin = 5
+		width = 10
+		x = size.width - @margin.right + margin
+		y = (size.height / 2) - (series.length * (width + margin) / 2)
+		
+
+	# get the series, CPU, CPU #1, CPU #2
+	dataSeries: (data) -> name for own name, values of data
+
+	# all data values
+	dataValues: (data) -> (value for value in values) for own name, values of data
 
 	# inner function
 	paintMore: (context, name, data, size) ->
@@ -79,9 +93,9 @@ root.Chart = class Chart
 		max = 100
 		for own name, values of data
 			max = Math.max(max, @getMax(values))
-		console.log(name)
-		@grids(context, size, max)
+		@gridLines(context, size, max)
 		@gridTitle(context, size, name)
+		@gridLegends(context, size, @dataSeries(data))
 		i = 0
 		context.lineWidth = 2 # first line is heavy
 		for own name, values of data
