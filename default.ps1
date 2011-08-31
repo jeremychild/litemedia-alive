@@ -30,7 +30,8 @@ properties {
 	$dir_lib = $dir_source + 'main\LiteMedia.Alive\'
 	
 	# Project files
-	$lib_fsproj = $dir_lib + 'LiteMedia.Alive (v4.0).fsproj'
+	$lib_fsproj_v2 = $dir_lib + 'LiteMedia.Alive (v2.0).fsproj'
+	$lib_fsproj_v4 = $dir_lib + 'LiteMedia.Alive (v4.0).fsproj'
 }
 
 task default -depends Compile
@@ -55,7 +56,9 @@ task Clean {
 
 # Compile the project
 task Compile -depends Clean {
-	exec { msbuild $lib_fsproj /verbosity:minimal /p:Configuration="$configuration" /p:Platform="Any CPU" /p:OutDir="$dir_compile_v4" /p:OutputPath="$dir_compile_v4" /p:SolutionDir="$dir_source" }
+	#exec { msbuild $lib_fsproj_v2 /verbosity:minimal /p:Configuration="$configuration" /p:Platform="Any CPU" /p:OutDir="$dir_compile_v2" /p:OutputPath="$dir_compile_v2" /p:SolutionDir="$dir_source" }	
+
+	exec { msbuild $lib_fsproj_v4 /verbosity:minimal /p:Configuration="$configuration" /p:Platform="Any CPU" /p:OutDir="$dir_compile_v4" /p:OutputPath="$dir_compile_v4" /p:SolutionDir="$dir_source" }	
 }
 
 task Package -depends Compile {

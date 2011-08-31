@@ -61,4 +61,19 @@
     worker = workers[_j];
     worker.agent.postMessage(worker.meta);
   }
+  root.initialize = function() {
+    var canvas, canvases, chart, height, width, _k, _len3, _results;
+    canvases = document.getElementsByClassName("chart");
+    width = Math.round(window.innerWidth / 3) - (20 * 3);
+    height = width / 2;
+    _results = [];
+    for (_k = 0, _len3 = canvases.length; _k < _len3; _k++) {
+      canvas = canvases[_k];
+      canvas.width = width;
+      canvas.height = height;
+      chart = new Chart(settings);
+      _results.push(chart.paint(canvas, canvas.id, []));
+    }
+    return _results;
+  };
 }).call(this);

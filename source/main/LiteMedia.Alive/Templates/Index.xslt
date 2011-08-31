@@ -41,9 +41,10 @@
       <script src="?file=chart.js"></script>
       <script src="?file=main.js"></script>
       <script>
+      <![CDATA[
         // initialize
-        (function() {
-        }).call(this);
+        initialize();
+      ]]>
       </script>
     </html>
   </xsl:template>

@@ -39,3 +39,16 @@ for worker in workers
 # Run all workers
 for worker in workers
   worker.agent.postMessage(worker.meta);
+
+# Initialize the page by setting canvas size and painting empty charts
+root.initialize = () ->
+	# set width * height of charts
+	canvases = document.getElementsByClassName("chart");
+	width = Math.round(window.innerWidth / 3) - (20 * 3);
+	height = width / 2
+	for canvas in canvases
+		canvas.width = width
+		canvas.height = height
+		# paint empty chart
+		chart = new Chart(settings);
+		chart.paint(canvas, canvas.id, []);

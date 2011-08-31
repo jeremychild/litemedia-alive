@@ -1,9 +1,8 @@
 Todo
 ----
 
-# Translate this todo to english
 # Validating configuration with XSD
 # Default configuration without any XML in web.config
-# Autosize on chart
-# Paint empty charts onload
 # Web sockets
+# Make a .NET 2.0 version
+# Filter unwanted browsers IE6
