@@ -7,13 +7,28 @@
       this.settings = settings;
       this.base_color = this.settings.base_color;
       this.graph_colors = this.settings.graph_colors;
+      this.padding = 5;
+      this.legend_size = 12;
+      this.label_font = '8.5 pt Arial';
       this.margin = {
         top: 10,
-        right: 80,
+        right: 100,
         bottom: 10,
         left: 25
       };
     }
+    Chart.prototype.setMarginRight = function(context, series) {
+      var legend, rightMargin, width, _i, _len;
+      rightMargin = 0;
+      for (_i = 0, _len = series.length; _i < _len; _i++) {
+        legend = series[_i];
+        width = context.measureText(legend).width;
+        rightMargin = Math.max(rightMargin, width);
+      }
+      if (rightMargin < this.margin.right) {
+        return this.margin.right = rightMargin + this.legend_size + (this.padding * 2) + 100;
+      }
+    };
     Chart.prototype.log10 = function(val) {
       return Math.log(val) / Math.log(10);
     };
@@ -76,15 +91,29 @@
     };
     Chart.prototype.gridTitle = function(context, size, title) {
       var x;
-      x = (size.width / 2) + (this.margin.left - this.margin.right);
-      console.log(size);
-      console.log(x);
-      console.log(title);
+      x = size.width / 2;
       context.font = '12pt Arial';
       context.textAlign = 'center';
       return context.fillText(title, x, this.margin.top * 2);
     };
-    Chart.prototype.gridLegends = function(series) {};
+    Chart.prototype.gridLegends = function(context, size, series) {
+      var i, legend, x, y, _i, _len, _results;
+      context.font = '8.5pt Arial';
+      context.textAlign = 'left';
+      x = size.width - this.margin.right + this.padding;
+      y = (size.height / 2) - (series.length * (this.legend_size + this.padding) / 2);
+      i = 0;
+      _results = [];
+      for (_i = 0, _len = series.length; _i < _len; _i++) {
+        legend = series[_i];
+        context.fillStyle = this.graph_colors[i++];
+        context.fillRect(x, y, this.legend_size, this.legend_size);
+        context.fillStyle = this.base_color;
+        context.fillText(legend, x + this.legend_size + this.padding, y + this.legend_size - (this.legend_size / 4));
+        _results.push(y += this.legend_size + this.padding);
+      }
+      return _results;
+    };
     Chart.prototype.dataSeries = function(data) {
       var name, values, _results;
       _results = [];
@@ -113,8 +142,9 @@
       }
       return _results;
     };
-    Chart.prototype.paintMore = function(context, name, data, size) {
-      var i, max, values, _results;
+    Chart.prototype.paintMore = function(context, title, data, size) {
+      var i, max, name, values, _results;
+      this.setMarginRight(context, this.dataSeries(data));
       max = 100;
       for (name in data) {
         if (!__hasProp.call(data, name)) continue;
@@ -122,8 +152,8 @@
         max = Math.max(max, this.getMax(values));
       }
       this.gridLines(context, size, max);
-      this.gridTitle(context, size, name);
-      this.gridLegends(this.dataSeries(data));
+      this.gridTitle(context, size, title);
+      this.gridLegends(context, size, this.dataSeries(data));
       i = 0;
       context.lineWidth = 2;
       _results = [];
@@ -144,12 +174,12 @@
     Chart.prototype.clear = function(context) {
       return context.clearRect(0, 0, context.canvas.width, context.canvas.height);
     };
-    Chart.prototype.paint = function(canvas, name, data) {
+    Chart.prototype.paint = function(canvas, title, data) {
       var context;
       context = canvas.getContext('2d');
-      this.clear(context);
       if (context != null) {
-        return this.paintMore(context, name, data, this.size(canvas));
+        this.clear(context);
+        return this.paintMore(context, title, data, this.size(canvas));
       } else {
         ;
       }

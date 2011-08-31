@@ -7,9 +7,21 @@ root.Chart = class Chart
 	constructor: (@settings) ->
 		@base_color = @settings.base_color
 		@graph_colors = @settings.graph_colors
-
+		@padding = 5 #px
+		@legend_size = 12 #px
+		@label_font = '8.5 pt Arial'
 		# margin is not a setting because it could potentially break the chart
-		@margin =  top: 10, right: 80, bottom: 10, left: 25
+		@margin =  top: 10, right: 100, bottom: 10, left: 25
+
+	# set right margin by measuring series legends
+	# this will only limit the width of right margin, not increase existing margin
+	setMarginRight: (context, series) ->
+		rightMargin = 0
+		for legend in series
+			width = context.measureText(legend).width
+			rightMargin = Math.max(rightMargin, width)
+		if rightMargin < @margin.right
+			@margin.right = rightMargin + @legend_size + (@padding * 2) + 100
 
 	# good enough log10 function
 	log10: (val) -> Math.log(val) / Math.log(10)
@@ -68,18 +80,24 @@ root.Chart = class Chart
 
 	# top text
 	gridTitle: (context, size, title) ->
-		x = (size.width / 2) + (@margin.left - @margin.right)
+		x = size.width / 2
 		context.font = '12pt Arial'
 		context.textAlign = 'center'
 		context.fillText(title, x, @margin.top * 2)
 
 	# paint the legends of data series with color
 	gridLegends: (context, size, series) ->
-		margin = 5
-		width = 10
-		x = size.width - @margin.right + margin
-		y = (size.height / 2) - (series.length * (width + margin) / 2)
-		
+		context.font = '8.5pt Arial'
+		context.textAlign = 'left'
+		x = size.width - @margin.right + @padding
+		y = (size.height / 2) - (series.length * (@legend_size + @padding) / 2)
+		i = 0
+		for legend in series
+			context.fillStyle = @graph_colors[i++]
+			context.fillRect(x, y, @legend_size, @legend_size)
+			context.fillStyle = @base_color
+			context.fillText(legend, x + @legend_size + @padding, y + @legend_size - (@legend_size / 4))
+			y += @legend_size + @padding
 
 	# get the series, CPU, CPU #1, CPU #2
 	dataSeries: (data) -> name for own name, values of data
@@ -88,13 +106,16 @@ root.Chart = class Chart
 	dataValues: (data) -> (value for value in values) for own name, values of data
 
 	# inner function
-	paintMore: (context, name, data, size) ->
+	paintMore: (context, title, data, size) ->
+		# set right margin
+		@setMarginRight(context, @dataSeries(data))
+
 		# calculate max
 		max = 100
 		for own name, values of data
 			max = Math.max(max, @getMax(values))
 		@gridLines(context, size, max)
-		@gridTitle(context, size, name)
+		@gridTitle(context, size, title)
 		@gridLegends(context, size, @dataSeries(data))
 		i = 0
 		context.lineWidth = 2 # first line is heavy
@@ -109,10 +130,10 @@ root.Chart = class Chart
 	clear: (context) -> context.clearRect(0,0,context.canvas.width,context.canvas.height)
 
 	# Entry function for painting chart
-	paint: (canvas, name, data) ->
+	paint: (canvas, title, data) ->
 		context = canvas.getContext('2d')
-		@clear(context)
 		if context?
-			@paintMore(context, name, data, @size(canvas))
+			@clear(context)
+			@paintMore(context, title, data, @size(canvas))
 		else
 			# error handling
