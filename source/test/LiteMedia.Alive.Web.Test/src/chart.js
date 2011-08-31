@@ -155,13 +155,13 @@
       this.gridTitle(context, size, title);
       this.gridLegends(context, size, this.dataSeries(data));
       i = 0;
-      context.lineWidth = 2;
+      context.lineWidth = 2.5;
       _results = [];
       for (name in data) {
         if (!__hasProp.call(data, name)) continue;
         values = data[name];
         this.graph(context, size, values, max, this.graph_colors[i++]);
-        _results.push(context.lineWidth = 1.5);
+        _results.push(context.lineWidth = 2);
       }
       return _results;
     };

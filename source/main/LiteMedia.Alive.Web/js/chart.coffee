@@ -118,10 +118,10 @@ root.Chart = class Chart
 		@gridTitle(context, size, title)
 		@gridLegends(context, size, @dataSeries(data))
 		i = 0
-		context.lineWidth = 2 # first line is heavy
+		context.lineWidth = 2.5 # first line is heavy
 		for own name, values of data
 			@graph(context, size, values, max, @graph_colors[i++])
-			context.lineWidth = 1.5 # light weight on lines 2..
+			context.lineWidth = 2 # light weight on lines 2..
 
 	# get size of the canvas
 	size: (canvas) -> width: canvas.width, height: canvas.height
