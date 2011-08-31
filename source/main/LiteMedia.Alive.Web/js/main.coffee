@@ -39,11 +39,3 @@ for worker in workers
 # Run all workers
 for worker in workers
   worker.agent.postMessage(worker.meta);
-
-# Paint empty charts
-window.initialize = () ->
-  ###
-  for el in document.getElementsByClass('chart')
-    el.width = imageSize().width
-    el.height = imageSize().height
-  ###

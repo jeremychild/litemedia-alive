@@ -2,10 +2,8 @@ Todo
 ----
 
 # Translate this todo to english
-# Validerande XSD för konfigurationen för intellisense
-# Defaultkonfiguration för .NET2 och .NET4 (utan app.config)
-# Legends
-# Autosize på diagram
-# onload rita ut tomma diagram
-# web sockets
-# Autoscaling av diagram
+# Validating configuration with XSD
+# Default configuration without any XML in web.config
+# Autosize on chart
+# Paint empty charts onload
+# Web sockets

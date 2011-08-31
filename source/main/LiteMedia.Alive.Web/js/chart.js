@@ -26,7 +26,7 @@
         rightMargin = Math.max(rightMargin, width);
       }
       if (rightMargin < this.margin.right) {
-        return this.margin.right = rightMargin + this.legend_size + (this.padding * 2) + 100;
+        return this.margin.right = rightMargin + this.legend_size + (this.padding * 2);
       }
     };
     Chart.prototype.log10 = function(val) {

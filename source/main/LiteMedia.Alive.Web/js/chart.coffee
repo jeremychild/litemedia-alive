@@ -21,7 +21,7 @@ root.Chart = class Chart
 			width = context.measureText(legend).width
 			rightMargin = Math.max(rightMargin, width)
 		if rightMargin < @margin.right
-			@margin.right = rightMargin + @legend_size + (@padding * 2) + 100
+			@margin.right = rightMargin + @legend_size + (@padding * 2)
 
 	# good enough log10 function
 	log10: (val) -> Math.log(val) / Math.log(10)

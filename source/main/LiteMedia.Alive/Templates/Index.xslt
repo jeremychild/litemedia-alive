@@ -8,19 +8,8 @@
     <html>
       <head>
         <link href="?file=main.css" rel="stylesheet" type="text/css" />
-        <script>
-          <xsl:call-template name="configuration" />
-
-          var settings = {
-            margin: { top: 10, right: 0, bottom: 10, left: 25 },
-            base_color: '#606060',
-            graph_colors: ['#006666', '#339999', '#00CC99', '#66CCCC', '#00FFCC', '#33FFCC', '#66FFCC', '#99FFCC', '#CCFFFF']
-          };
-        </script>
-        <script src="?file=chart.js"></script>
-        <script src="?file=main.js"></script>
       </head>
-      <body onload="window.initialize();">
+      <body>
         <article>
           <header>
             <h1>
@@ -40,6 +29,22 @@
           </p>
         </footer>
       </body>
+
+      <script>
+        <xsl:call-template name="configuration" />
+
+        var settings = {
+          base_color: '#606060',
+          graph_colors: ['#006666', '#339999', '#00CC99', '#66CCCC', '#00FFCC', '#33FFCC', '#66FFCC', '#99FFCC', '#CCFFFF']
+        };
+      </script>
+      <script src="?file=chart.js"></script>
+      <script src="?file=main.js"></script>
+      <script>
+        // initialize
+        (function() {
+        }).call(this);
+      </script>
     </html>
   </xsl:template>
 
