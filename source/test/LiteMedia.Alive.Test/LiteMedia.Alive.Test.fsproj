@@ -36,6 +36,7 @@
   <ItemGroup>
     <None Include="packages.config" />
     <Compile Include="PerfMon.fs" />
+    <Compile Include="Model.fs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />
@@ -43,6 +44,8 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Numerics" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Xml" />
     <Reference Include="Unquote">
       <HintPath>..\..\packages\Unquote.2.1.0\lib\net40\Unquote.dll</HintPath>
       <Private>True</Private>

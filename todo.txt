@@ -1,8 +1,6 @@
 Todo
 ----
 
-# Större siffror i marginalen och fler mätpunkter
-# Den dynamiska högermariginalen skall ha sin maxbredd satt till 1/4 av totalen
 # Validating configuration with XSD
 # Default configuration without any XML in web.config
 # Web sockets

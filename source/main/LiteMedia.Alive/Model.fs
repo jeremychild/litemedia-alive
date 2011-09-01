@@ -31,12 +31,12 @@
     }
 
     let counterJson (counter : Counter) =
-      sprintf @"{""CategoryName"":""%s"",""CounterName"":""%s"",""CurrentValue"":%f,""InstanceName"":""%s"",""Name"":""%s""}"
+      sprintf @"{""CategoryName"":""%s"",""CounterName"":""%s"",""CurrentValue"":%f,""InstanceName"":{""value"":""%s""},""Name"":""%s""}"
         counter.CategoryName counter.CounterName counter.CurrentValue counter.InstanceName.Value counter.Name
 
     // Extend Counter entity with functions
     type Counter with
-      member x.Json = counterJson
+      member this.ToJson() = counterJson this
 
     /// Functional String.Join
     let stringJoin (separator : string) (seq : string seq) =
@@ -45,11 +45,11 @@
     /// Get json of group
     let groupJson (group : Group) =
       let counters = group.Counters |> Seq.map counterJson |> stringJoin ","
-      sprintf @"{""Counters"":[%s],""Name"":""%s"",""UpdateLatency"":%d}" counters group.Name, group.UpdateLatency
+      sprintf @"{""Counters"":[%s],""Name"":""%s"",""UpdateLatency"":%d}" counters group.Name group.UpdateLatency
 
     // Extend Group entity with functions
     type Group with
-      member x.Json = groupJson
+      member this.ToJson() = groupJson this
 
 //{"Counters":[{"CategoryName":"ASP.NET","CounterName":"Requests Queued","CurrentValue":0,"InstanceName":{"value":""},"Name":"Queued"}],"Name":"ASP.NET Requests","UpdateLatency":1000}
 

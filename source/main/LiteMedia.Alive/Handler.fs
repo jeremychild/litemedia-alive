@@ -11,7 +11,6 @@ open System.IO
 open System.Diagnostics
 open System.Collections.Generic
 open System.Runtime.InteropServices
-open System.Runtime.Serialization.Json
 open System.Runtime.Serialization
 
 open LiteMedia.Alive
@@ -79,8 +78,9 @@ type Handler() as this =
     let BuildSingleDataResponse (response : HttpResponse) group =
       try
         let result = group |> PerfMon.measureGroup
-        let serializer = new DataContractJsonSerializer(result.GetType())
-        serializer.WriteObject(response.OutputStream, result) |> ignore
+        //let serializer = new DataContractJsonSerializer(result.GetType())
+        //serializer.WriteObject(response.OutputStream, result) |> ignore
+        response.Write(result.ToJson())
       with
         | :? PerfMon.NoSuchPerformanceCounterException as exn -> writeErrorResponse response exn
         | :? System.TimeoutException as exn -> writeErrorResponse response exn

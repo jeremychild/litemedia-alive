@@ -8,7 +8,7 @@
     <ProjectGuid>{408599c7-ba2e-4c4e-a2f0-e7ea53dd91e5}</ProjectGuid>
     <OutputType>Library</OutputType>
     <RootNamespace>LiteMedia.Alive</RootNamespace>
-    <AssemblyName>LiteMedia.Alive</AssemblyName>
+    <AssemblyName>Alive</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <Name>LiteMedia.Alive (v2.0)</Name>
     <TargetFrameworkProfile />
@@ -18,7 +18,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <Tailcalls>false</Tailcalls>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>bin\net20\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <WarningLevel>3</WarningLevel>
     <DocumentationFile>
