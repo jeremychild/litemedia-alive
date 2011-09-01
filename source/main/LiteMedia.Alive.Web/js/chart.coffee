@@ -11,7 +11,7 @@ root.Chart = class Chart
 		@legend_size = 12 #px
 		@label_font = '8.5 pt Arial'
 		# margin is not a setting because it could potentially break the chart
-		@margin =  top: 10, right: 100, bottom: 10, left: 25
+		@margin =  top: 10, right: 100, bottom: 10, left: 30
 
 	# set right margin by measuring series legends
 	# this will only limit the width of right margin, not increase existing margin
@@ -20,7 +20,8 @@ root.Chart = class Chart
 		for legend in series
 			width = context.measureText(legend).width
 			rightMargin = Math.max(rightMargin, width)
-		if rightMargin < @margin.right
+		# max right margin is 1/4 of total width
+		if rightMargin < (context.canvas.width / 4)
 			@margin.right = rightMargin + @legend_size + (@padding * 2)
 
 	# good enough log10 function
@@ -72,11 +73,19 @@ root.Chart = class Chart
 		context.stroke()
 
 		# Grid text
-		context.font = '8.5pt Arial'
+		context.font = '10pt Arial'
 		context.textAlign = 'center'
-		context.fillText('0', @margin.left / 2, size.height - (@margin.bottom / 2))
-		context.fillText(max / 2, @margin.left / 2, size.height / 2)
-		context.fillText(max, @margin.left / 2, 15)
+		# place labels in the middle of the left margin
+		x = @margin.left / 2
+		# y of the 0 axis
+		bottom = size.height - (@margin.bottom / 2)
+		# y of the top label
+		top = 15
+		# the distance between labels on the canvas vertically
+		yStep = (bottom - top) / 5
+		# the step between labels 0, 20, 40, 60, 80, 100
+		valueStep = max / 5
+		context.fillText(n * valueStep, x, bottom - (n * yStep)) for n in [0..6]
 
 	# top text
 	gridTitle: (context, size, title) ->

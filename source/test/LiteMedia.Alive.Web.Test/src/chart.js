@@ -14,7 +14,7 @@
         top: 10,
         right: 100,
         bottom: 10,
-        left: 25
+        left: 30
       };
     }
     Chart.prototype.setMarginRight = function(context, series) {
@@ -25,7 +25,7 @@
         width = context.measureText(legend).width;
         rightMargin = Math.max(rightMargin, width);
       }
-      if (rightMargin < this.margin.right) {
+      if (rightMargin < (context.canvas.width / 4)) {
         return this.margin.right = rightMargin + this.legend_size + (this.padding * 2);
       }
     };
@@ -75,6 +75,7 @@
       return context.stroke();
     };
     Chart.prototype.gridLines = function(context, size, max) {
+      var bottom, n, top, valueStep, x, yStep, _results;
       context.fillStyle = this.base_color;
       context.strokeStyle = this.base_color;
       context.lineWidth = 1;
@@ -83,11 +84,18 @@
       context.lineTo(this.margin.left, size.height - this.margin.bottom);
       context.lineTo(size.width - this.margin.right, size.height - this.margin.bottom);
       context.stroke();
-      context.font = '8.5pt Arial';
+      context.font = '10pt Arial';
       context.textAlign = 'center';
-      context.fillText('0', this.margin.left / 2, size.height - (this.margin.bottom / 2));
-      context.fillText(max / 2, this.margin.left / 2, size.height / 2);
-      return context.fillText(max, this.margin.left / 2, 15);
+      x = this.margin.left / 2;
+      bottom = size.height - (this.margin.bottom / 2);
+      top = 15;
+      yStep = (bottom - top) / 5;
+      valueStep = max / 5;
+      _results = [];
+      for (n = 0; n <= 6; n++) {
+        _results.push(context.fillText(n * valueStep, x, bottom - (n * yStep)));
+      }
+      return _results;
     };
     Chart.prototype.gridTitle = function(context, size, title) {
       var x;
