@@ -52,9 +52,11 @@ getData = (name, successCallback, failureCallback) ->
 				else
 					failureCallback(httpRequest.responseText)
 				ongoingRequest = false
+			else
+				ongoingRequest = true
 		catch error
-			failureCallback()
 			ongoingRequest = false
+			failureCallback()
 
 	httpRequest.open('GET', getDataUrl(name))
 	httpRequest.send(null)

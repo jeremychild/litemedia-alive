@@ -183,6 +183,12 @@ type Configuration() =
             new CounterElement(Name = "SQL", CategoryName = "ASP.NET Applications", CounterName = "Session SQL Server connections total", InstanceName = "__Total__");
             new CounterElement(Name = "State Server", CategoryName = "ASP.NET Applications", CounterName = "Session State Server connections total", InstanceName = "__Total__")
           |]);
+        new GroupElement(Name = "Errors", UpdateLatency = "5000", Counters =
+          [|
+            new CounterElement(Name = "Requests Failed", CategoryName = "ASP.NET Applications", CounterName = "Requests Failed", InstanceName = "__Total__");
+            new CounterElement(Name = "Exceptions", CategoryName = "ASP.NET Applications", CounterName = "Errors During Execution", InstanceName = "__Total__");
+            new CounterElement(Name = "Unhandled Exceptions", CategoryName = "ASP.NET Applications", CounterName = "Errors Unhandled During Execution", InstanceName = "__Total__");
+          |])
       |]
     result.Groups <- groups
     result

@@ -85,4 +85,4 @@ module PerfMon =
   /// Measurement is done during the group.UpdateLatency time. This measurement is done asyncrously.
   let measureGroup group =
     let measurements = group.Counters |> Seq.map (measureCounterAsync group.UpdateLatency)
-    { group with Counters = Async.RunSynchronously(Async.Parallel(measurements), group.UpdateLatency * 3) }
+    { group with Counters = Async.Parallel(measurements) |> Async.RunSynchronously }

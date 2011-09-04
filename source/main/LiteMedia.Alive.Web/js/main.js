@@ -8,7 +8,7 @@
       'CPU': {},
       'Disc': {}
     }
-  */  var data, dir, imageSize, log, name, paintChart, root, worker, workers, _i, _j, _len, _len2;
+  */  var data, dir, log, name, paintChart, root, worker, workers, _i, _j, _len, _len2;
   var __hasProp = Object.prototype.hasOwnProperty;
   root = typeof exports !== "undefined" && exports !== null ? exports : this;
   log = function(message) {
@@ -37,15 +37,6 @@
     }
     return _results;
   })();
-  imageSize = function() {
-    var margin, width;
-    margin = 60;
-    width = Math.round(window.innerWidth / 3) - margin;
-    return {
-      width: width,
-      height: Math.round(width / 2)
-    };
-  };
   paintChart = function(name, data) {
     var chart;
     chart = new root.Chart(settings);

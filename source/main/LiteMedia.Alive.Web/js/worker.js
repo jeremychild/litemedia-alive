@@ -56,10 +56,12 @@
             failureCallback(httpRequest.responseText);
           }
           return ongoingRequest = false;
+        } else {
+          return ongoingRequest = true;
         }
       } catch (error) {
-        failureCallback();
-        return ongoingRequest = false;
+        ongoingRequest = false;
+        return failureCallback();
       }
     };
     httpRequest.open('GET', getDataUrl(name));

@@ -20,12 +20,6 @@ dir = (obj) -> console.dir(obj) if console?
 workers = for own name, data of charts
   { 'meta': { 'name': name, 'latency': data.latency}, 'agent': new Worker('?file=worker.js') }
 
-# TODO -- feels a bit out of place here
-imageSize = () ->
-	margin = 60 # take as argument
-	width = Math.round(window.innerWidth / 3) - margin
-	{ width: width, height: Math.round(width / 2) }
-
 # Update chart with [name] with [data]
 paintChart = (name, data) ->	
 	# NOTE requires that settings has been defined
