@@ -35,20 +35,29 @@ type SettingsSection() =
     [<ConfigurationProperty(Node.Column)>] 
     member self.Columns = self.[Node.Column] :?> string
 
+/// Counter configurations
 type CounterElement() =
     inherit ConfigurationElement()
 
     [<ConfigurationProperty(Node.Name)>]
-    member self.Name = self.[Node.Name] :?> string
+    member self.Name 
+      with get ()      = self.[Node.Name] :?> string
+      and  set (value) = self.[Node.Name] <- value
 
     [<ConfigurationProperty(Node.CategoryName)>]
-    member self.CategoryName = self.[Node.CategoryName] :?> string
+    member self.CategoryName 
+      with get ()      = self.[Node.CategoryName] :?> string
+      and  set (value) = self.[Node.CategoryName] <- value
 
     [<ConfigurationProperty(Node.CounterName)>]
-    member self.CounterName = self.[Node.CounterName] :?> string
+    member self.CounterName 
+      with get ()      = self.[Node.CounterName] :?> string
+      and  set (value) = self.[Node.CounterName] <- value
 
     [<ConfigurationProperty(Node.InstanceName)>]
-    member self.InstanceName = self.[Node.InstanceName] :?> string
+    member self.InstanceName
+      with get ()      = self.[Node.InstanceName] :?> string
+      and  set (value) = self.[Node.InstanceName] <- value
 
     member self.Model = {
         Name = self.Name;
@@ -79,13 +88,29 @@ type GroupElement() =
       | _ -> base.OnDeserializeUnrecognizedAttribute(name, value)
 
     let intParse = System.Int32.Parse
-    member self.Name = self.name
-    member self.UpdateLatency = self.updateLatency
+    
+    /// Name of the group
+    member self.Name
+      with get ()      = self.name
+      and  set (value) = self.name <- value
+
+    /// How often the counter group should be updated
+    member self.UpdateLatency
+      with get ()      = self.updateLatency
+      and  set (value) = self.updateLatency <- value
+
+    member private self.Add el = base.BaseAdd el
+
+    /// This collection counters
+    member self.Counters
+      with get ()      = [| for i in self do yield i.Model |]
+      and  set (value) = value |> Seq.iter self.Add
+
     member self.Model = 
       { 
         Name = self.Name; 
         UpdateLatency = intParse(self.UpdateLatency); 
-        Counters = [| for i in self do yield i.Model |] 
+        Counters = self.Counters 
       }
 
     member self.toSeq =
@@ -99,10 +124,14 @@ type GroupElement() =
 [<ConfigurationCollection(typedefof<GroupElement>,CollectionType = ConfigurationElementCollectionType.BasicMap,AddItemName = Node.Group)>]
 type GroupsCollection() =
     inherit ConfigurationElementCollection()
+
     override self.CollectionType = ConfigurationElementCollectionType.BasicMap
     override self.ElementName = Node.Group
     override self.CreateNewElement() = new GroupElement() :> ConfigurationElement
     override self.GetElementKey el = (el :?> GroupElement).Name :> System.Object
+
+    member private self.Add el = base.BaseAdd el
+    member self.AddRange elements = elements |> Seq.iter self.Add
 
     member self.toSeq = 
         let enumerator = base.GetEnumerator()
@@ -128,10 +157,34 @@ type Configuration() =
   /// Example: None >>> 2 -> 2
   static let (>>>) a b = match a with | None -> b | _ -> a.Value
 
-  // Default counters if now configuration was supplied
+  // Default counters if no configuration was supplied
   static let defaultCounters : CountersSection =
     let result = new CountersSection()
-    result.Groups <- new GroupsCollection()
+    let groups = new GroupsCollection()
+    groups.AddRange 
+      [|
+        new GroupElement(Name = "Hardware", UpdateLatency = "1000", Counters = 
+          [|
+            new CounterElement(Name = "CPU", CategoryName = "Processor Information", CounterName = "% Processor Time", InstanceName = "_Total");
+            new CounterElement(Name = "CPU #1", CategoryName = "Processor Information", CounterName = "% Processor Time", InstanceName = "0,0");
+            new CounterElement(Name = "CPU #2", CategoryName = "Processor Information", CounterName = "% Processor Time", InstanceName = "0,1")
+          |]);
+        new GroupElement(Name = "Memory", UpdateLatency = "5000", Counters = 
+          [|
+            new CounterElement(Name = "Memory %", CategoryName = "Memory", CounterName = "% Committed Bytes In Use");
+            new CounterElement(Name = "Paging File %", CategoryName = "Paging File", CounterName = "% Processor Time", InstanceName = "_Total")
+          |]);
+        new GroupElement(Name = "ASP.NET Requests", UpdateLatency = "5000", Counters = 
+          [|
+            new CounterElement(Name = "Queued", CategoryName = "ASP.NET", CounterName = "Requests Queued")
+          |]);
+        new GroupElement(Name = "Connections", UpdateLatency = "5000", Counters = 
+          [|
+            new CounterElement(Name = "SQL", CategoryName = "ASP.NET Applications", CounterName = "Session SQL Server connections total", InstanceName = "__Total__");
+            new CounterElement(Name = "State Server", CategoryName = "ASP.NET Applications", CounterName = "Session State Server connections total", InstanceName = "__Total__")
+          |]);
+      |]
+    result.Groups <- groups
     result
 
   // No settings at the moment but in the future
