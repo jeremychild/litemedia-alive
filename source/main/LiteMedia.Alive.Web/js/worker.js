@@ -1,16 +1,12 @@
 (function() {
-  var appendToState, failedResponse, getData, getDataUrl, handleResponse, log, ongoingRequest, process, state;
+  var appendToState, failedResponse, getData, getDataUrl, handleResponse, log, process, state;
   var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
   log = function(msg) {};
   state = {};
-  ongoingRequest = false;
   process = function(evt) {
     var counters;
-    if (!ongoingRequest) {
-      ongoingRequest = true;
-      counters = {};
-      return getData(evt.data.name, handleResponse, failedResponse);
-    }
+    counters = {};
+    return getData(evt.data.name, handleResponse, failedResponse);
   };
   handleResponse = function(responseData) {
     state = appendToState(responseData);
@@ -51,16 +47,12 @@
       try {
         if (httpRequest.readyState === 4) {
           if (httpRequest.status === 200) {
-            successCallback(JSON.parse(httpRequest.responseText));
+            return successCallback(JSON.parse(httpRequest.responseText));
           } else {
-            failureCallback(httpRequest.responseText);
+            return failureCallback(httpRequest.responseText);
           }
-          return ongoingRequest = false;
-        } else {
-          return ongoingRequest = true;
         }
       } catch (error) {
-        ongoingRequest = false;
         return failureCallback();
       }
     };
@@ -71,6 +63,6 @@
   this.onmessage = __bind(function(evt) {
     return setInterval((function() {
       return process(evt);
-    }), 50);
+    }), Math.round(evt.data.latency * 1.25));
   }, this);
 }).call(this);

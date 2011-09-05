@@ -4,15 +4,10 @@ log = (msg) -> # postMessage { 'data': msg }
 # State
 state = {}
 
-# Keep track if a request is ongoing
-ongoingRequest = false
-
 # Process data and retrieve an url for chart
 process = (evt) ->
-	if not ongoingRequest
-		ongoingRequest = true
-		counters = {}
-		getData(evt.data.name, handleResponse, failedResponse)
+	counters = {}
+	getData(evt.data.name, handleResponse, failedResponse)
 	
 # Handle the counter response
 handleResponse = (responseData) ->
@@ -51,11 +46,7 @@ getData = (name, successCallback, failureCallback) ->
 					successCallback(JSON.parse(httpRequest.responseText))
 				else
 					failureCallback(httpRequest.responseText)
-				ongoingRequest = false
-			else
-				ongoingRequest = true
 		catch error
-			ongoingRequest = false
 			failureCallback()
 
 	httpRequest.open('GET', getDataUrl(name))
@@ -63,5 +54,5 @@ getData = (name, successCallback, failureCallback) ->
 	result
 
 # Bind worker onmessage to executing process with a certain interval
-this.onmessage = (evt) => setInterval((-> process(evt)), 50)
+this.onmessage = (evt) => setInterval((-> process(evt)), Math.round(evt.data.latency * 1.25))
 #this.onmessage = (evt) => process(evt)

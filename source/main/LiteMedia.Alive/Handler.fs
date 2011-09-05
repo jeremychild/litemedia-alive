@@ -78,8 +78,6 @@ type Handler() as this =
     let BuildSingleDataResponse (response : HttpResponse) group =
       try
         let result = group |> PerfMon.measureGroup
-        //let serializer = new DataContractJsonSerializer(result.GetType())
-        //serializer.WriteObject(response.OutputStream, result) |> ignore
         response.Write(result.ToJson())
       with
         | :? PerfMon.NoSuchPerformanceCounterException as exn -> writeErrorResponse response exn
