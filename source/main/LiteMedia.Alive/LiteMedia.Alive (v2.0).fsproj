@@ -40,18 +40,18 @@
     <Compile Include="PerfMon.fs" />
     <Compile Include="Handler.fs" />
     <Compile Include="AssemblyInfo.fs" />
-    <Content Include="..\LiteMedia.Alive.Web\js\chart.js">
+    <EmbeddedResource Include="..\LiteMedia.Alive.Web\js\chart.js">
       <Link>chart.js</Link>
-    </Content>
-    <Content Include="..\LiteMedia.Alive.Web\js\main.js">
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\LiteMedia.Alive.Web\js\main.js">
       <Link>main.js</Link>
-    </Content>
-    <Content Include="..\LiteMedia.Alive.Web\js\worker.js">
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\LiteMedia.Alive.Web\js\worker.js">
       <Link>worker.js</Link>
-    </Content>
-    <None Include="..\LiteMedia.Alive.Web\css\main.scss">
-      <Link>main.scss</Link>
-    </None>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\LiteMedia.Alive.Web\css\main.css">
+      <Link>main.css</Link>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />
