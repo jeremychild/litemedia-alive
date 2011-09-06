@@ -55,11 +55,11 @@ task Clean {
 
 # Compile the project
 task Compile -depends Clean {
-	exec { msbuild $lib_fsproj_v2 /verbosity:minimal /p:Configuration="$configuration" /p:Platform="Any CPU" /p:OutDir="$dir_compile_v2" /p:OutputPath="$dir_compile_v2" /p:SolutionDir="$dir_source"  /ToolsVersion:3.5 }	
+	exec { msbuild $lib_fsproj_v2 /verbosity:minimal /p:OutDir="$dir_compile_v2" /p:OutputPath="$dir_compile_v2" /p:SolutionDir="$dir_source"  }	
 
 	exec { msbuild $lib_fsproj_v4 /verbosity:minimal /p:Configuration="$configuration" /p:Platform="Any CPU" /p:OutDir="$dir_compile_v4" /p:OutputPath="$dir_compile_v4" /p:SolutionDir="$dir_source" }	
 }
 
 task Package -depends Compile {
-	exec { &$exe_ilmerge /lib:"$sys_net4" /lib:"$sys_publicAsm" /t:dll /targetplatform:"v4,$sys_net4" /out:"$dir_package_v4\LiteMedia.Alive.dll" "$dir_compile_v4\LiteMedia.Alive.dll" "$dir_compile_v4\FSharp.Core.dll" }
+	#exec { &$exe_ilmerge /lib:"$sys_net4" /lib:"$sys_publicAsm" /t:dll /targetplatform:"v4,$sys_net4" /out:"$dir_package_v4\LiteMedia.Alive.dll" "$dir_compile_v4\LiteMedia.Alive.dll" "$dir_compile_v4\FSharp.Core.dll" }
 }
