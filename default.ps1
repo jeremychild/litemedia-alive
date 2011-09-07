@@ -61,15 +61,17 @@ task Clean {
 
 # Compile the project
 task Compile -depends Clean {
+	# Compile .NET version 2.0
 	exec { msbuild $lib_fsproj_v2 /p:OutputPath="$dir_compile_v2" /p:SolutionDir="$dir_source" }	
 
+	# Compile .NET version 4.0
 	exec { msbuild $lib_fsproj_v4 /verbosity:minimal /p:Configuration="$configuration" /p:Platform="Any CPU" /p:OutDir="$dir_compile_v4" /p:OutputPath="$dir_compile_v4" /p:SolutionDir="$dir_source" }	
 }
 
 task Package -depends Compile {
 	
 	# Package version 2.0
-	exec { &$exe_ilmerge /t:dll /targetplatform:"v4" /out:"$dir_package_v2\bin\Alive.dll" "$dir_compile_v2\Alive.dll" "$dir_compile_v2\FSharp.Core.dll" }
+	exec { &$exe_ilmerge /t:dll /out:"$dir_package_v2\bin\Alive.dll" "$dir_compile_v2\Alive.dll" "$dir_compile_v2\FSharp.Core.dll" }
 	Copy-Item "Documentation\*" "$dir_package_v2" -recurse
 	exec { &$exe_zip a -tzip "$dir_package_v2_zip" "$dir_package_v2"  }
 	
