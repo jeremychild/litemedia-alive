@@ -18,16 +18,22 @@ properties {
 	# Directories we use for the build
 	$dir_build = $cwd + 'Build\'
 	$dir_compile = $dir_build + 'Compile\'
-	$dir_compile_v2 = $dir_compile + 'v2.0\'
-	$dir_compile_v4 = $dir_compile + 'v4\'
-	$dir_package = $dir_build + 'Package\'
-	$dir_package_v2 = $dir_package + 'Alive-0.1-net20\'
-	$dir_package_v2_bin = $dir_package_v2 + 'bin\'
-	$dir_package_v2_zip = $dir_package + 'Alive-0.1-net20.zip'
-	$dir_package_v4 = $dir_package + 'Alive-0.1-net4\'
-	$dir_package_v4_bin = $dir_package_v4 + 'bin\'
-	$dir_package_v4_zip = $dir_package + 'Alive-0.1-net4.zip'
 	$dir_test = $dir_build + 'Test\'
+	$dir_package = $dir_build + 'Package\'
+	
+	# x86
+	$dir_compile_x86 = $dir_compile + 'x86\'
+	$dir_compile_x86_v2 = $dir_compile_x86 + 'net20\'
+	$dir_compile_x86_v4 = $dir_compile_x86 + 'v4\'
+	$dir_package_x86 = $dir_package + 'x86\'
+	$dir_package_x86_v2 = $dir_package_x86 + 'Alive-0.1-net20\'
+	$dir_package_x86_v2_bin = $dir_package_x86_v2 + 'bin\'
+	$dir_package_x86_v2_zip = $dir_package_x86 + 'Alive-0.1-x86-net20.zip'
+	$dir_package_x86_v4 = $dir_package_x86 + 'Alive-0.1-net4\'
+	$dir_package_x86_v4_bin = $dir_package_x86_v4 + 'bin\'
+	$dir_package_x86_v4_zip = $dir_package_x86 + 'Alive-0.1-x86-net4.zip'
+	
+	# x64
 	
 	# Source directories
 	$dir_source = $cwd + 'Source\'
@@ -48,35 +54,40 @@ task Clean {
 	
 	# Recreate build target directories
 	md $dir_build 
-	md $dir_compile
-	md $dir_compile_v2
-	md $dir_compile_v4
+	md $dir_compile_x86
+	md $dir_compile_x86_v2
+	md $dir_compile_x86_v4
 	md $dir_package
-	md $dir_package_v2
-	md $dir_package_v2_bin
-	md $dir_package_v4_bin
+	md $dir_package_x86
+	md $dir_package_x86_v2
+	md $dir_package_x86_v2_bin
+	md $dir_package_x86_v4
+	md $dir_package_x86_v4_bin
 	
 	md $dir_test
 }
 
 # Compile the project
 task Compile -depends Clean {
+
+	# x86
 	# Compile .NET version 2.0
-	exec { msbuild $lib_fsproj_v2 /p:OutputPath="$dir_compile_v2" /p:SolutionDir="$dir_source" }	
+	exec { msbuild $lib_fsproj_v2 /p:OutputPath="$dir_compile_x86_v2" /p:SolutionDir="$dir_source" }	
 
 	# Compile .NET version 4.0
-	exec { msbuild $lib_fsproj_v4 /verbosity:minimal /p:Configuration="$configuration" /p:Platform="Any CPU" /p:OutDir="$dir_compile_v4" /p:OutputPath="$dir_compile_v4" /p:SolutionDir="$dir_source" }	
+	exec { msbuild $lib_fsproj_v4 /verbosity:minimal /p:Configuration="$configuration" /p:Platform="Any CPU" /p:OutDir="$dir_compile_x86_v4" /p:OutputPath="$dir_compile_x86_v4" /p:SolutionDir="$dir_source" }	
 }
 
 task Package -depends Compile {
-	
+
+	# x86
 	# Package version 2.0
-	exec { &$exe_ilmerge /t:dll /out:"$dir_package_v2\bin\Alive.dll" "$dir_compile_v2\Alive.dll" "$dir_compile_v2\FSharp.Core.dll" }
-	Copy-Item "Documentation\*" "$dir_package_v2" -recurse
-	exec { &$exe_zip a -tzip "$dir_package_v2_zip" "$dir_package_v2"  }
+	exec { &$exe_ilmerge /t:dll /out:"$dir_package_x86_v2\bin\Alive.dll" "$dir_compile_x86_v2\Alive.dll" "$dir_compile_x86_v2\FSharp.Core.dll" }
+	Copy-Item "Documentation\*" "$dir_package_x86_v2" -recurse
+	exec { &$exe_zip a -tzip "$dir_package_x86_v2_zip" "$dir_package_x86_v2"  }
 	
 	# Package version 4
-	exec { &$exe_ilmerge /lib:"$sys_net4" /lib:"$sys_publicAsm" /t:dll /targetplatform:"v4,$sys_net4" /out:"$dir_package_v4\bin\Alive.dll" "$dir_compile_v4\Alive.dll" "$dir_compile_v4\FSharp.Core.dll" }
-	Copy-Item "Documentation\*" "$dir_package_v4" -recurse
-	exec { &$exe_zip a -tzip "$dir_package_v4_zip" "$dir_package_v4"  }
+	exec { &$exe_ilmerge /lib:"$sys_net4" /lib:"$sys_publicAsm" /t:dll /targetplatform:"v4,$sys_net4" /out:"$dir_package_x86_v4\bin\Alive.dll" "$dir_compile_x86_v4\Alive.dll" "$dir_compile_x86_v4\FSharp.Core.dll" }
+	Copy-Item "Documentation\*" "$dir_package_x86_v4" -recurse
+	exec { &$exe_zip a -tzip "$dir_package_x86_v4_zip" "$dir_package_x86_v4"  }
 }

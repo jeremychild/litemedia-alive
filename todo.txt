@@ -2,7 +2,7 @@ Todo
 ----
 
 # Validating configuration with XSD
-# Web sockets
+# Web sockets - SignalR
 # Make a .NET 2.0 version
 # Filter unwanted browsers IE6
 # Helper class for consuming new counters
