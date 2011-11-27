@@ -1,0 +1,5 @@
+Before running build.cmd, make sure that you acccept running powershell scripts on your system.
+You do this by opening a powershell console as an administrator and type
+> Set-ExecutionPolicy Unrestricted
+
+Read more about execution policies here: http://technet.microsoft.com/en-us/library/dd347649.aspx
