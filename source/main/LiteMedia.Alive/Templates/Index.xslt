@@ -24,8 +24,7 @@
         </article>
         <footer>
           <p>
-            Alive was created by <a href="http://litemedia.info/about">Mikael Lundin @ litemedia</a> and is free for use and <a href="https://code.google.com/p/litemedia-alive/">open source</a>.
-            If you want to contribute to this project you can <a href="http://fundedbyme.com/">donate money</a> or source code.
+            Alive was created by <a href="http://litemedia.info/about">Mikael Lundin</a> and is free for use and <a href="https://code.google.com/p/litemedia-alive/">open source</a>.
           </p>
         </footer>
       </body>

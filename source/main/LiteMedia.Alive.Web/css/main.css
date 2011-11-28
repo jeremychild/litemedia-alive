@@ -8,10 +8,12 @@ h1 {
   font-size: 37px;
   font-weight: normal; }
   h1 a {
-    color: inherit;
-    text-decoration: none; }
+    color: inherit; }
   h1 .acute {
     color: #CFCFCF; }
+
+a {
+  text-decoration: none; }
 
 ul.charts {
   list-style-type: none; }
