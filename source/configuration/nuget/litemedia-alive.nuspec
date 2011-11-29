@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>Alive</id>
+    <version>0.1</version>
+    <authors>Mikael Lundin</authors>
+    <owners>Mikael Lundin</owners>
+    <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0</licenseUrl>
+    <projectUrl>http://code.google.com/p/litemedia-alive/</projectUrl>
+    <iconUrl>https://litemedia.blob.core.windows.net/media/Default/Info/Static/alive-icon.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>ASP.NET Live performance counter dashboard</description>
+    <releaseNotes>First release.</releaseNotes>
+    <copyright>Copyright 2011</copyright>
+    <tags>dashboard performance counters</tags>
+    <dependencies>
+      <!--<dependency id="SampleDependency" version="1.0" />-->
+    </dependencies>
+  </metadata>
+</package>
