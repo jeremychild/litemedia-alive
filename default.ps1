@@ -12,6 +12,7 @@ properties {
 	$exe_msbuild_x64 = "C:\Windows\Microsoft.NET\Framework64\v4.0.30319\msbuild.exe"
 	$exe_ilmerge = $cwd + 'source\packages\ilmerge.2.10.526.4\ilmerge.exe'
 	$exe_zip = 'source\packages\7z\7z.exe'
+	$exe_nuget = 'source\packages\NuGet 2.0\NuGet.exe'
 	
 	# Paths
 	$sys_net4 = 'C:\Windows\Microsoft.NET\Framework\v4.0.30319'
@@ -124,10 +125,12 @@ task Package -depends Compile {
 	exec { &$exe_ilmerge /lib:"$sys_net4" /lib:"$sys_publicAsm" /t:dll /targetplatform:"v4,$sys_net4" /out:"$dir_package_x64_v4\bin\Alive.dll" "$dir_compile_x64_v4\Alive.dll" "$dir_compile_x64_v4\FSharp.Core.dll" }
 	
 	# create nuget package
-	Copy-Item "$dir_package_x64_v2\bin\Alive.dll" $dir_nuget_lib_v2
-	Copy-Item "$dir_package_x64_v4\bin\Alive.dll" $dir_nuget_lib_v4
-	Copy-Item "$dir_config\nuget\content" $dir_nuget
-
+	Write-Host "Create NuGet Package"
+	Copy-Item "$dir_package_x86_v2\bin\Alive.dll" $dir_nuget_lib_v2
+	Copy-Item "$dir_package_x86_v4\bin\Alive.dll" $dir_nuget_lib_v4
+	Copy-Item "$dir_config\nuget\*" $dir_nuget -recurse
+	exec { &$exe_nuget pack "$dir_nuget\litemedia-alive.nuspec" -OutputDirectory "$dir_build" }
+	
 	# create zip package
 	# x86
 	Copy-Item "Documentation\*" "$dir_package_x86_v2" -recurse
