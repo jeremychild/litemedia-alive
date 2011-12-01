@@ -3,9 +3,9 @@ Todo
 
 # Validating configuration with XSD
 # Web sockets - SignalR
-# Make a .NET 2.0 version
 # Filter unwanted browsers IE6
 # Helper class for consuming new counters
 # Write numbers over 1000 as 1K and over 1 millon as 1M
 # Get counters from another computer
 # Make it configurable to write counter history to database
+# Store history in client, make it possible to pause and rewind

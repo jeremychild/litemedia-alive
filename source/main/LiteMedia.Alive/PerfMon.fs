@@ -3,6 +3,14 @@ open Model
 open System
 open System.Diagnostics
 
+// Logging
+module Log =
+  let private _log = Common.Logging.LogManager.GetLogger("alive-debug")
+  let private _audit = Common.Logging.LogManager.GetLogger("alive-audit")
+
+  let audit fmt = Printf.ksprintf (fun s -> _audit.Info(s)) fmt
+  let error fmt = Printf.ksprintf (fun s -> _log.Error(s)) fmt
+
 /// Performance monitor functionality
 module PerfMon =
   exception NoSuchPerformanceCounterException of string
@@ -56,7 +64,9 @@ module PerfMon =
   let measure time (factory : unit -> PerformanceCounter) =
     use counter = factory()
     try
-      (measureFn counter.CounterType) time counter
+      let result = (measureFn counter.CounterType) time counter
+      (Log.audit "%s/%s@%s:%E" counter.CategoryName counter.CounterName counter.InstanceName result) |> ignore
+      result
     finally
       counter.Close()
 
@@ -77,7 +87,7 @@ module PerfMon =
       with
         // Does a better job communicating that the counter failed than an exception
         | exn -> 
-          Debug.WriteLine exn.Message
+          (Log.error "Failed measure counter %s/%s:%s" counter.CategoryName counter.CounterName exn.Message) |> ignore
           cont({ counter with CurrentValue = -1.f })
     )
     
