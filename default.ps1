@@ -111,18 +111,22 @@ task Compile -depends Clean {
 	exec { & $exe_msbuild_x86 $lib_fsproj_v4 "/p:OutputPath=$dir_compile_x64_v4;SolutionDir=$dir_source;Configuration=Release;Platform=x64" }	
 }
 
-task Package -depends Compile {
+Function ILMerge() {
 	# ilmerge
 	# x86
 	Write-Host "ILMerge x86 v2.0"
-	exec { &$exe_ilmerge /targetplatform:"v2,C:\Windows\Microsoft.NET\Framework\v2.0.50727" /t:dll /out:"$dir_package_x86_v2\bin\Alive.dll" "$dir_compile_x86_v2\Alive.dll" "$dir_compile_x86_v2\Common.Logging.dll" "$dir_compile_x86_v2\FSharp.Core.dll" }
+	exec { &$exe_ilmerge /targetplatform:"v2,C:\Windows\Microsoft.NET\Framework\v2.0.50727" /t:dll /out:"$dir_package_x86_v2\bin\Alive.dll" "$dir_compile_x86_v2\Alive.dll" "$dir_compile_x86_v2\FSharp.Core.dll" }
 	Write-Host "ILMerge x86 v4"
-	exec { &$exe_ilmerge /lib:"$sys_net4" /lib:"$sys_publicAsm" /t:dll /targetplatform:"v4,$sys_net4" /out:"$dir_package_x86_v4\bin\Alive.dll" "$dir_compile_x86_v4\Alive.dll" "$dir_compile_x86_v4\Common.Logging.dll" "$dir_compile_x86_v4\FSharp.Core.dll" }
+	exec { &$exe_ilmerge /lib:"$sys_net4" /lib:"$sys_publicAsm" /t:dll /targetplatform:"v4,$sys_net4" /out:"$dir_package_x86_v4\bin\Alive.dll" "$dir_compile_x86_v4\Alive.dll" "$dir_compile_x86_v4\FSharp.Core.dll" }
 	# x64
 	Write-Host "ILMerge x64 v2.0"
-	exec { &$exe_ilmerge /t:dll /out:"$dir_package_x64_v2\bin\Alive.dll" "$dir_compile_x64_v2\Alive.dll" "$dir_compile_x64_v2\Common.Logging.dll" "$dir_compile_x64_v2\FSharp.Core.dll" }
+	exec { &$exe_ilmerge /t:dll /out:"$dir_package_x64_v2\bin\Alive.dll" "$dir_compile_x64_v2\Alive.dll" "$dir_compile_x64_v2\FSharp.Core.dll" }
 	Write-Host "ILMerge x64 v4"
-	exec { &$exe_ilmerge /lib:"$sys_net4" /lib:"$sys_publicAsm" /t:dll /targetplatform:"v4,$sys_net4" /out:"$dir_package_x64_v4\bin\Alive.dll" "$dir_compile_x64_v4\Alive.dll" "$dir_compile_x64_v4\Common.Logging.dll" "$dir_compile_x64_v4\FSharp.Core.dll" }
+	exec { &$exe_ilmerge /lib:"$sys_net4" /lib:"$sys_publicAsm" /t:dll /targetplatform:"v4,$sys_net4" /out:"$dir_package_x64_v4\bin\Alive.dll" "$dir_compile_x64_v4\Alive.dll" "$dir_compile_x64_v4\FSharp.Core.dll" }
+}
+
+task Package -depends Compile {
+	ILMerge;
 	
 	# create nuget package
 	Write-Host "Create NuGet Package"

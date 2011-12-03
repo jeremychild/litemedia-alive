@@ -3,14 +3,6 @@ open Model
 open System
 open System.Diagnostics
 
-// Logging
-module Log =
-  let private _log = Common.Logging.LogManager.GetLogger("alive-debug")
-  let private _audit = Common.Logging.LogManager.GetLogger("alive-audit")
-
-  let audit fmt = Printf.ksprintf (fun s -> _audit.Info(s)) fmt
-  let error fmt = Printf.ksprintf (fun s -> _log.Error(s)) fmt
-
 /// Performance monitor functionality
 module PerfMon =
   exception NoSuchPerformanceCounterException of string
