@@ -101,8 +101,7 @@ task Compile -depends Clean {
 
 	# Compile .NET version 4.0
 	exec { & $exe_msbuild_x86 $lib_fsproj_v4 "/p:OutputPath=$dir_compile_x86_v4;SolutionDir=$dir_source;Configuration=Release;Platform=x86" }
-	
-	
+		
 	# x64
 	# Compile .NET version 2.0
 	exec { & $exe_msbuild_x86 $lib_fsproj_v2 "/p:OutputPath=$dir_compile_x64_v2;SolutionDir=$dir_source;Configuration=Release;Platform=x64" }
@@ -133,7 +132,7 @@ task Package -depends Compile {
 	Copy-Item "$dir_package_x86_v2\bin\Alive.dll" $dir_nuget_lib_v2
 	Copy-Item "$dir_package_x86_v4\bin\Alive.dll" $dir_nuget_lib_v4
 	Copy-Item "$dir_config\nuget\*" $dir_nuget -recurse
-	exec { &$exe_nuget pack "$dir_nuget\litemedia-alive.nuspec" -OutputDirectory "$dir_build" }
+	exec { & $exe_nuget pack "$dir_nuget\litemedia-alive.nuspec" -OutputDirectory "$dir_build" }
 	
 	# create zip package
 	# x86

@@ -15,9 +15,9 @@ module Log =
       Some((fun (m : string) -> (loggerMethod.Invoke(loggerInstance, [|m|]) |> ignore)))
     with | _ -> None
   
-  // Lazy instance of audit log
+  // Lazy instance of activity log
   let private _audit = lazy ( 
-    match (logMethod "alive-debug" "Info") with 
+    match (logMethod "alive-activity" "Info") with 
     | Some(log) -> log 
     | None -> (fun m -> ())
   )
@@ -30,5 +30,5 @@ module Log =
   )
 
   // Public interface
-  let audit format = Printf.ksprintf _audit.Value format
+  let activity format = Printf.ksprintf _audit.Value format
   let error format = Printf.ksprintf _error.Value format

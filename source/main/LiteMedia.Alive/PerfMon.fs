@@ -57,7 +57,7 @@ module PerfMon =
     use counter = factory()
     try
       let result = (measureFn counter.CounterType) time counter
-      (Log.audit "%s/%s@%s:%E" counter.CategoryName counter.CounterName counter.InstanceName result) |> ignore
+      (Log.activity "%s/%s@%s:%E" counter.CategoryName counter.CounterName counter.InstanceName result) |> ignore
       result
     finally
       counter.Close()
