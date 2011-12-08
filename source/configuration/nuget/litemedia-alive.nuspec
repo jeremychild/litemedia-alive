@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>LiteMediaAlive</id>
-    <version>0.1.1</version>
+    <version>0.2</version>
     <authors>Mikael Lundin</authors>
     <owners>Mikael Lundin</owners>
     <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0</licenseUrl>

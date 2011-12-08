@@ -13,6 +13,13 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "LiteMedia.Alive (v2.0)", "m
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LiteMedia.Alive.Web.Test", "test\LiteMedia.Alive.Web.Test\LiteMedia.Alive.Web.Test.csproj", "{2593C083-E53A-43D4-9FF1-3073818CE938}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Configuration", "Configuration", "{EA42912C-675C-4817-8429-A467FA0E66DA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NuGet", "NuGet", "{5E7A9D6D-B446-4657-B060-A7F8379CE07B}"
+	ProjectSection(SolutionItems) = preProject
+		configuration\nuget\litemedia-alive.nuspec = configuration\nuget\litemedia-alive.nuspec
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -75,5 +82,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{2DCF83FA-86F7-456F-9D46-8024AE51F383} = {013F72D0-F291-47C9-90CE-C69EB97C00BF}
 		{2593C083-E53A-43D4-9FF1-3073818CE938} = {013F72D0-F291-47C9-90CE-C69EB97C00BF}
+		{5E7A9D6D-B446-4657-B060-A7F8379CE07B} = {EA42912C-675C-4817-8429-A467FA0E66DA}
 	EndGlobalSection
 EndGlobal
