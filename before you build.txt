@@ -3,3 +3,7 @@ You do this by opening a powershell console as an administrator and type
 > Set-ExecutionPolicy Unrestricted
 
 Read more about execution policies here: http://technet.microsoft.com/en-us/library/dd347649.aspx
+
+You also need FSharp SDK on your system. If you've installed Visual Studio 2010, you might have 
+what's needed. Otherwise you can download and install it from
+http://research.microsoft.com/en-us/um/cambridge/projects/fsharp/release.aspx

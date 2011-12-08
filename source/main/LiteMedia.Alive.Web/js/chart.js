@@ -40,7 +40,9 @@
         max = Math.max(max, n);
       }
       ceil = Math.pow(10, Math.ceil(this.log10(max)));
-      if ((ceil / 2) > max) {
+      if ((ceil / 4) > max) {
+        return ceil / 4;
+      } else if ((ceil / 2) > max) {
         return ceil / 2;
       } else {
         return ceil;

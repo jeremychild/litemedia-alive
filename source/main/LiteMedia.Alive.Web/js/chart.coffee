@@ -29,6 +29,7 @@ root.Chart = class Chart
 
 	# get max value of graph, 100 is minimal
 	# example: getMax [99] -> 100
+	# example: getMax [101] -> 250
 	# example: getMax [251] -> 500
 	# example: getMax [501] -> 1000
 	getMax: (data) ->
@@ -36,7 +37,12 @@ root.Chart = class Chart
 		for n in data
 			max = Math.max(max, n)
 		ceil = Math.pow(10, Math.ceil(@log10(max)))
-		if (ceil / 2) > max then ceil / 2 else ceil
+		if (ceil / 4) > max 
+			ceil / 4 
+		else if (ceil / 2) > max
+			ceil / 2
+		else
+			ceil
 
 	# Get the scaler of y
 	yScaler: (size, max) -> (size.height - @margin.top - @margin.bottom) / max
