@@ -76,6 +76,15 @@
       }
       return context.stroke();
     };
+    Chart.prototype.formatLabel = function(label) {
+      if (label >= 1000000) {
+        return "" + (label / 1000000) + "M";
+      } else if (label >= 1000) {
+        return "" + (label / 1000) + "K";
+      } else {
+        return "" + label;
+      }
+    };
     Chart.prototype.gridLines = function(context, size, max) {
       var bottom, n, top, valueStep, x, yStep, _results;
       context.fillStyle = this.base_color;
@@ -86,7 +95,7 @@
       context.lineTo(this.margin.left, size.height - this.margin.bottom);
       context.lineTo(size.width - this.margin.right, size.height - this.margin.bottom);
       context.stroke();
-      context.font = '10pt Arial';
+      context.font = '9pt Arial';
       context.textAlign = 'center';
       x = this.margin.left / 2;
       bottom = size.height - (this.margin.bottom / 2);
@@ -95,7 +104,7 @@
       valueStep = max / 5;
       _results = [];
       for (n = 0; n <= 6; n++) {
-        _results.push(context.fillText(n * valueStep, x, bottom - (n * yStep)));
+        _results.push(context.fillText(this.formatLabel(n * valueStep), x, bottom - (n * yStep)));
       }
       return _results;
     };

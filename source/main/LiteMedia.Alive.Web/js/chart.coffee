@@ -67,6 +67,16 @@ root.Chart = class Chart
 			context.lineTo(x, y)
 		context.stroke()
 
+	# Type legend as 1K instead of 1000
+	# Type legend as 1M instead of 1000000
+	formatLabel: (label) ->
+		if label >= 1000000
+			"#{label / 1000000}M"
+		else if label >= 1000
+			"#{label / 1000}K"
+		else
+			"#{label}"
+
 	# paint grids
 	gridLines: (context, size, max) ->
 		context.fillStyle = @base_color
@@ -79,7 +89,7 @@ root.Chart = class Chart
 		context.stroke()
 
 		# Grid text
-		context.font = '10pt Arial'
+		context.font = '9pt Arial'
 		context.textAlign = 'center'
 		# place labels in the middle of the left margin
 		x = @margin.left / 2
@@ -91,7 +101,7 @@ root.Chart = class Chart
 		yStep = (bottom - top) / 5
 		# the step between labels 0, 20, 40, 60, 80, 100
 		valueStep = max / 5
-		context.fillText(n * valueStep, x, bottom - (n * yStep)) for n in [0..6]
+		context.fillText(@formatLabel(n * valueStep), x, bottom - (n * yStep)) for n in [0..6]
 
 	# top text
 	gridTitle: (context, size, title) ->
