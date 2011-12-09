@@ -4,7 +4,7 @@ root = exports ? this
 # responsible for painting a chart
 root.Chart = class Chart
 	# create new instance of chart
-	constructor: (@settings) ->
+	constructor: (@settings, @configuration) ->
 		@base_color = @settings.base_color
 		@graph_colors = @settings.graph_colors
 		@padding = 5 #px
@@ -136,7 +136,7 @@ root.Chart = class Chart
 		@setMarginRight(context, @dataSeries(data))
 
 		# calculate max
-		max = 100
+		max = @configuration.max
 		for own name, values of data
 			max = Math.max(max, @getMax(values))
 		@gridLines(context, size, max)

@@ -56,7 +56,7 @@
   <xsl:template name="charts">
     <xsl:apply-templates select="//a:Model.Group" mode="li" />
   </xsl:template>
-  <xsl:template match="a:Model.Group" mode="json"><xsl:if test="not(position()=1)"><xsl:text>,</xsl:text></xsl:if>'<xsl:value-of select="a:Name"/>': { 'latency': <xsl:value-of select="a:UpdateLatency"/> }</xsl:template>
+  <xsl:template match="a:Model.Group" mode="json"><xsl:if test="not(position()=1)"><xsl:text>,</xsl:text></xsl:if>'<xsl:value-of select="a:Name"/>': { 'latency': <xsl:value-of select="a:UpdateLatency"/>, 'max': <xsl:value-of select="a:Max"/> }</xsl:template>
   <xsl:template match="a:Model.Group" mode="li">
     <li>
       <canvas width="440" height="220" class="chart">

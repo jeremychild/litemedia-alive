@@ -26,6 +26,8 @@
         Name : string
         [<field : DataMember(Name = "UpdateLatency")>]
         UpdateLatency : int
+        [<field : DataMember(Name = "Max")>]
+        Max : int
         [<field : DataMember(Name = "Counters")>] 
         Counters : Counter[] 
     }
@@ -50,11 +52,3 @@
     // Extend Group entity with functions
     type Group with
       member this.ToJson() = groupJson this
-
-//{"Counters":[{"CategoryName":"ASP.NET","CounterName":"Requests Queued","CurrentValue":0,"InstanceName":{"value":""},"Name":"Queued"}],"Name":"ASP.NET Requests","UpdateLatency":1000}
-
-//    let GetConfiguration = [|
-//            { Name = "Hardware";
-//              Counters = [|{ CategoryName = "Processor Information"; CounterName = "% Processor Time"; InstanceName = Some("_Total"); Name = "CPU"; CurrentValue = 50.f }|]
-//            }
-//          |]

@@ -23,7 +23,7 @@ workers = for own name, data of charts
 # Update chart with [name] with [data]
 paintChart = (name, data) ->	
 	# NOTE requires that settings has been defined
-	chart = new root.Chart(settings)
+	chart = new root.Chart(settings, charts[name])
 	chart.paint(document.getElementById(name), name, data)
 
 # Register callback that alerts the message from worker, for now
@@ -44,5 +44,5 @@ root.initialize = () ->
 		canvas.width = width
 		canvas.height = height
 		# paint empty chart
-		chart = new Chart(settings);
+		chart = new Chart(settings, charts[canvas.id]);
 		chart.paint(canvas, canvas.id, []);

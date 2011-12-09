@@ -14,7 +14,9 @@ module Node =
     [<Literal>]
     let Name = "name"
     [<Literal>]
-    let updateLatency = "updateLatency"
+    let UpdateLatency = "updateLatency"
+    [<Literal>]
+    let Max = "max"
     [<Literal>]
     let Counter = "counter"
     [<Literal>]
@@ -74,6 +76,8 @@ type GroupElement() =
     val mutable name : string
     [<DefaultValue>]
     val mutable updateLatency : string
+    [<DefaultValue>]
+    val mutable max : string
 
     override self.CollectionType = ConfigurationElementCollectionType.BasicMap
     override self.ElementName = Node.Counter
@@ -81,10 +85,9 @@ type GroupElement() =
     override self.GetElementKey el = (el :?> CounterElement).Name :> System.Object
     override self.OnDeserializeUnrecognizedAttribute (name,value) =
       match name with
-      | Node.Name -> self.name <- value
-                     true
-      | Node.updateLatency -> self.updateLatency <- value
-                              true
+      | Node.Name -> self.name <- value; true
+      | Node.UpdateLatency -> self.updateLatency <- value; true
+      | Node.Max -> self.max <- value; true
       | _ -> base.OnDeserializeUnrecognizedAttribute(name, value)
 
     let intParse = System.Int32.Parse
@@ -95,9 +98,15 @@ type GroupElement() =
       and  set (value) = self.name <- value
 
     /// How often the counter group should be updated
+    /// Default value is 1000
     member self.UpdateLatency
-      with get ()      = self.updateLatency
+      with get ()      = match self.updateLatency with | null -> "1000" | _ -> self.updateLatency
       and  set (value) = self.updateLatency <- value
+
+    // Default max value of chart is 100
+    member self.Max
+      with get ()      = match self.max with | null -> "100" | _ -> self.max
+      and  set (value) = self.max <- value
 
     member private self.Add el = base.BaseAdd el
 
@@ -110,7 +119,8 @@ type GroupElement() =
       { 
         Name = self.Name; 
         UpdateLatency = intParse(self.UpdateLatency); 
-        Counters = self.Counters 
+        Max = intParse(self.Max);
+        Counters = self.Counters
       }
 
     member self.toSeq =

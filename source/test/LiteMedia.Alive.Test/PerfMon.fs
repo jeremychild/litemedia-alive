@@ -26,6 +26,7 @@ let hardwareGroup : Model.Group =
   { 
     Name = "Hardware";
     UpdateLatency = 1000;
+    FixedScale = 100;
     Counters = 
       [|
         cpuCounter "_Total";

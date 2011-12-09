@@ -9,3 +9,4 @@ Todo
 # Make it configurable to write counter history to database (document it)
 # Store history in client, make it possible to pause and rewind
 # Ability to set scale in config
+# Not average but median

@@ -1,10 +1,14 @@
 (function() {
   var Chart, root;
   var __hasProp = Object.prototype.hasOwnProperty;
+
   root = typeof exports !== "undefined" && exports !== null ? exports : this;
+
   root.Chart = Chart = (function() {
-    function Chart(settings) {
+
+    function Chart(settings, configuration) {
       this.settings = settings;
+      this.configuration = configuration;
       this.base_color = this.settings.base_color;
       this.graph_colors = this.settings.graph_colors;
       this.padding = 5;
@@ -17,6 +21,7 @@
         left: 30
       };
     }
+
     Chart.prototype.setMarginRight = function(context, series) {
       var legend, rightMargin, width, _i, _len;
       rightMargin = 0;
@@ -29,9 +34,11 @@
         return this.margin.right = rightMargin + this.legend_size + (this.padding * 2);
       }
     };
+
     Chart.prototype.log10 = function(val) {
       return Math.log(val) / Math.log(10);
     };
+
     Chart.prototype.getMax = function(data) {
       var ceil, max, n, _i, _len;
       max = 100;
@@ -48,9 +55,11 @@
         return ceil;
       }
     };
+
     Chart.prototype.yScaler = function(size, max) {
       return (size.height - this.margin.top - this.margin.bottom) / max;
     };
+
     Chart.prototype.xStep = function(size, length) {
       if (length > 0) {
         return (size.width - this.margin.left - this.margin.right) / (length - 1);
@@ -58,6 +67,7 @@
         return 0;
       }
     };
+
     Chart.prototype.graph = function(context, size, data, max, color) {
       var item, scaler, step, x, y, _i, _len, _ref;
       scaler = this.yScaler(size, max);
@@ -67,7 +77,7 @@
       context.beginPath();
       context.moveTo(x, y);
       context.strokeStyle = color;
-      _ref = data.slice(1, (data.length + 1) || 9e9);
+      _ref = data.slice(1, data.length + 1 || 9e9);
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         item = _ref[_i];
         x += step;
@@ -76,6 +86,7 @@
       }
       return context.stroke();
     };
+
     Chart.prototype.formatLabel = function(label) {
       if (label >= 1000000) {
         return "" + (label / 1000000) + "M";
@@ -85,6 +96,7 @@
         return "" + label;
       }
     };
+
     Chart.prototype.gridLines = function(context, size, max) {
       var bottom, n, top, valueStep, x, yStep, _results;
       context.fillStyle = this.base_color;
@@ -108,6 +120,7 @@
       }
       return _results;
     };
+
     Chart.prototype.gridTitle = function(context, size, title) {
       var x;
       x = size.width / 2;
@@ -115,6 +128,7 @@
       context.textAlign = 'center';
       return context.fillText(title, x, this.margin.top * 2);
     };
+
     Chart.prototype.gridLegends = function(context, size, series) {
       var i, legend, x, y, _i, _len, _results;
       context.font = '8.5pt Arial';
@@ -133,6 +147,7 @@
       }
       return _results;
     };
+
     Chart.prototype.dataSeries = function(data) {
       var name, values, _results;
       _results = [];
@@ -143,6 +158,7 @@
       }
       return _results;
     };
+
     Chart.prototype.dataValues = function(data) {
       var name, value, values, _results;
       _results = [];
@@ -161,10 +177,11 @@
       }
       return _results;
     };
+
     Chart.prototype.paintMore = function(context, title, data, size) {
       var i, max, name, values, _results;
       this.setMarginRight(context, this.dataSeries(data));
-      max = 100;
+      max = this.configuration.max;
       for (name in data) {
         if (!__hasProp.call(data, name)) continue;
         values = data[name];
@@ -184,15 +201,18 @@
       }
       return _results;
     };
+
     Chart.prototype.size = function(canvas) {
       return {
         width: canvas.width,
         height: canvas.height
       };
     };
+
     Chart.prototype.clear = function(context) {
       return context.clearRect(0, 0, context.canvas.width, context.canvas.height);
     };
+
     Chart.prototype.paint = function(canvas, title, data) {
       var context;
       context = canvas.getContext('2d');
@@ -200,9 +220,12 @@
         this.clear(context);
         return this.paintMore(context, title, data, this.size(canvas));
       } else {
-        ;
+
       }
     };
+
     return Chart;
+
   })();
+
 }).call(this);
