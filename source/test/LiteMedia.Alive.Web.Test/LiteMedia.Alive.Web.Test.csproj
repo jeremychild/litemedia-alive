@@ -33,6 +33,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Alive">
+      <HintPath>..\..\packages\LiteMediaAlive.0.1.1\lib\net40\Alive.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
@@ -54,6 +57,7 @@
     <Content Include="..\..\main\LiteMedia.Alive.Web\js\chart.js">
       <Link>src\chart.js</Link>
     </Content>
+    <Content Include="Index.aspx" />
     <Content Include="lib\jasmine-1.0.2\jasmine-html.js" />
     <Content Include="lib\jasmine-1.0.2\jasmine.css" />
     <Content Include="lib\jasmine-1.0.2\jasmine.js" />
@@ -66,10 +70,18 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Index.aspx.cs">
+      <DependentUpon>Index.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Index.aspx.designer.cs">
+      <DependentUpon>Index.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="lib\jasmine-1.0.2\MIT.LICENSE" />
+    <Content Include="packages.config" />
     <None Include="spec\chart-spec.coffee">
       <Generator>CoffeeScriptGenerator</Generator>
       <LastGenOutput>chart-spec.js</LastGenOutput>
