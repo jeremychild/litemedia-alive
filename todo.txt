@@ -10,3 +10,4 @@ Todo
 # Store history in client, make it possible to pause and rewind
 # Not average but median
 # Last slash should not be mandatory
+# Solve all warnings

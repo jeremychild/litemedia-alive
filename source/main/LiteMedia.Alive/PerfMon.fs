@@ -20,12 +20,12 @@ module PerfMon =
   /// Retrieve a counter by groupName counterName and Some(instanceName)
   /// Example: let factory = counterFact "Processor Information" "% Processor Time" (Some("_Total"))
   ///          use(counter = factory())
-  let counterFact groupName counterName instanceName =
+  let counterFact groupName counterName instanceName (machineName : string) =
     (fun () ->
       try
         match instanceName with
-        | Some name -> new PerformanceCounter(groupName, counterName, name, true)
-        | None ->  new PerformanceCounter(groupName, counterName, true)
+        | Some name -> new PerformanceCounter(groupName, counterName, name, true, MachineName = machineName)
+        | None -> new PerformanceCounter(groupName, counterName, true, MachineName = machineName)
       with 
         | :? InvalidOperationException as ex -> raise (NoSuchPerformanceCounterException(ex.Message))
       )
@@ -68,7 +68,7 @@ module PerfMon =
   /// Returns a new counter with updated value
   /// Example: measureCounter 1000 { CategoryName = "Processor Information"; CounterName = "% Processor Time"; InstanceName = Some("_Total"); Name = "CPU"; CurrentValue = 50.f }
   let measureCounter time counter =
-    { counter with CurrentValue = measure time (counterFact counter.CategoryName counter.CounterName counter.InstanceName) }
+    { counter with CurrentValue = measure time (counterFact counter.CategoryName counter.CounterName counter.InstanceName counter.Machine) }
   
   /// Async version of measure the counter
   /// Will set the counter to -1 on failure

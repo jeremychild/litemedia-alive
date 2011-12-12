@@ -25,6 +25,8 @@ module Node =
     let CounterName = "counterName"
     [<Literal>]
     let InstanceName = "instanceName"
+    [<Literal>]
+    let Machine = "machine"
 
 open System.Configuration
 open System.Collections
@@ -61,11 +63,17 @@ type CounterElement() =
       with get ()      = self.[Node.InstanceName] :?> string
       and  set (value) = self.[Node.InstanceName] <- value
 
+    [<ConfigurationProperty(Node.Machine)>]
+    member self.Machine
+      with get ()      = self.[Node.Machine] :?> string
+      and  set (value) = self.[Node.Machine] <- value
+
     member self.Model = {
         Name = self.Name;
         CategoryName = self.CategoryName; 
         CounterName = self.CounterName; 
-        InstanceName = match self.InstanceName with | null -> None | name -> Some(name);
+        InstanceName = match System.String.IsNullOrEmpty(self.InstanceName) with | false -> Some(self.InstanceName) | _ -> None;
+        Machine = match System.String.IsNullOrEmpty(self.Machine) with | false -> self.Machine | _ -> ".";
         CurrentValue = 0.f;
     }
 

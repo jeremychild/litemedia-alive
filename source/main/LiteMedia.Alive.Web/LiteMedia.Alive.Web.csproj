@@ -98,7 +98,12 @@
     </None>
     <Content Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\LiteMedia.Alive\LiteMedia.Alive %28v4.0%29.fsproj">
+      <Project>{46D20295-B460-41BB-BBF8-03A58DB77829}</Project>
+      <Name>LiteMedia.Alive %28v4.0%29</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
   <ProjectExtensions>

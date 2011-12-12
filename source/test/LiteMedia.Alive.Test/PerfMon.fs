@@ -9,7 +9,8 @@ let unknownCounter : Model.Counter =
     Name = "GPU"; CurrentValue = 50.f;
     CategoryName = "Processor Information";
     CounterName = "% GPU Time";
-    InstanceName = None
+    InstanceName = None;
+    Machine = "."
   }
 
 // Create a cpu counter
@@ -18,7 +19,9 @@ let cpuCounter instance : Model.Counter =
     CategoryName = "Processor Information"; 
     CounterName = "% Processor Time"; 
     InstanceName = Some(instance); 
-    Name = "CPU"; CurrentValue = 50.f
+    Name = "CPU"; 
+    Machine = ".";
+    CurrentValue = 50.f;
   }  
 
 // Hardware group are cpu counters
@@ -37,7 +40,7 @@ let hardwareGroup : Model.Group =
 
 [<Fact>]
 let ``cannot retrive performance counter from counterFact should throw exception`` () =
-  raises<PerfMon.NoSuchPerformanceCounterException> <@ (PerfMon.counterFact unknownCounter.CategoryName unknownCounter.CounterName unknownCounter.InstanceName)() @>
+  raises<PerfMon.NoSuchPerformanceCounterException> <@ (PerfMon.counterFact unknownCounter.CategoryName unknownCounter.CounterName unknownCounter.InstanceName unknownCounter.Machine)() @>
 
 [<Fact>]
 let ``should retrieve value from average cpu performance counter`` () =

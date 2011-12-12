@@ -16,6 +16,8 @@
         InstanceName : string Option
         [<field : DataMember(Name = "Name")>]
         Name : string
+        [<field : DataMember(Name = "Machine")>]
+        Machine : string
         [<field : DataMember(Name = "CurrentValue")>]
         CurrentValue : float32
     }

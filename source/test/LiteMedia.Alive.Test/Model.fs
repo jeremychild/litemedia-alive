@@ -8,7 +8,9 @@ let cpuCounter instance : Model.Counter =
     CategoryName = "Processor Information"; 
     CounterName = "% Processor Time"; 
     InstanceName = Some(instance); 
-    Name = "CPU"; CurrentValue = 50.f
+    Name = "CPU"; 
+    Machine = "."
+    CurrentValue = 50.f
   }
 
 let group : Model.Group = 
