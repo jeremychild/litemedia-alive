@@ -35,8 +35,9 @@
     }
 
     let counterJson (counter : Counter) =
+      let instanceName = match counter.InstanceName with | Some(name) -> name | None -> ""
       sprintf @"{""CategoryName"":""%s"",""CounterName"":""%s"",""CurrentValue"":%f,""InstanceName"":{""value"":""%s""},""Name"":""%s""}"
-        counter.CategoryName counter.CounterName counter.CurrentValue counter.InstanceName.Value counter.Name
+        counter.CategoryName counter.CounterName counter.CurrentValue instanceName counter.Name
 
     // Extend Counter entity with functions
     type Counter with
