@@ -15,6 +15,13 @@ h1 {
 a {
   text-decoration: none; }
 
+div.group {
+  clear: left;
+  border-color: 3px solid #74A3B0; }
+  div.group h2 {
+    color: #74A3B0;
+    font-size: 1.2em; }
+
 ul.charts {
   list-style-type: none; }
   ul.charts li {

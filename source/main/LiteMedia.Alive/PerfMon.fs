@@ -83,8 +83,8 @@ module PerfMon =
           cont({ counter with CurrentValue = -1.f })
     )
     
-  /// Measure the performance counters of the group
-  /// Measurement is done during the group.UpdateLatency time. This measurement is done asyncrously.
-  let measureGroup group =
-    let measurements = group.Counters |> Seq.map (measureCounterAsync group.UpdateLatency)
-    { group with Counters = Async.RunSynchronously(Async.Parallel(measurements), group.UpdateLatency * 3) }
+  /// Measure the performance counters of the chart
+  /// Measurement is done during the chart.UpdateLatency time. This measurement is done asyncrously.
+  let measureChart chart =
+    let measurements = chart.Counters |> Seq.map (measureCounterAsync chart.UpdateLatency)
+    { chart with Counters = Async.RunSynchronously(Async.Parallel(measurements), chart.UpdateLatency * 3) }

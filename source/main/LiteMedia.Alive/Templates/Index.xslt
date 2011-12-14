@@ -18,9 +18,7 @@
               Alive
             </h1>
           </header>
-          <ul class="charts">
-            <xsl:call-template name="charts" />
-          </ul>
+          <xsl:apply-templates select="//a:Model.Group" />
         </article>
         <footer>
           <p>
@@ -47,17 +45,24 @@
       </script>
     </html>
   </xsl:template>
-
+  
   <xsl:template name="configuration">
     charts = {
-      <xsl:apply-templates select="//a:Model.Group" mode="json"/>
+      <xsl:apply-templates select="//a:Model.Group/a:Charts/a:Model.Chart" mode="json"/>
     }
   </xsl:template>
-  <xsl:template name="charts">
-    <xsl:apply-templates select="//a:Model.Group" mode="li" />
+  <xsl:template match="a:Model.Group">
+    <div class="group">
+      <h2>
+        <xsl:value-of select="a:Name"/>
+      </h2>
+      <ul class="charts">
+        <xsl:apply-templates select="a:Charts/*" mode="li" />
+      </ul>
+    </div>
   </xsl:template>
-  <xsl:template match="a:Model.Group" mode="json"><xsl:if test="not(position()=1)"><xsl:text>,</xsl:text></xsl:if>'<xsl:value-of select="a:Name"/>': { 'latency': <xsl:value-of select="a:UpdateLatency"/>, 'max': <xsl:value-of select="a:Max"/> }</xsl:template>
-  <xsl:template match="a:Model.Group" mode="li">
+  <xsl:template match="a:Model.Chart" mode="json"><xsl:if test="not(position()=1)"><xsl:text>,</xsl:text></xsl:if>'<xsl:value-of select="a:Name"/>': { 'latency': <xsl:value-of select="a:UpdateLatency"/>, 'max': <xsl:value-of select="a:Max"/> }</xsl:template>
+  <xsl:template match="a:Model.Chart" mode="li">
     <li>
       <canvas width="440" height="220" class="chart">
         <xsl:attribute name="id">

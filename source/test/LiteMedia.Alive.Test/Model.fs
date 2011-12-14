@@ -13,7 +13,7 @@ let cpuCounter instance : Model.Counter =
     CurrentValue = 50.f
   }
 
-let group : Model.Group = 
+let chart : Model.Chart = 
   {
     Name = "Hardware";
     UpdateLatency = 1000;
@@ -26,6 +26,12 @@ let group : Model.Group =
     |]
   }
 
+let group : Model.Group = 
+ {
+    Name = "First Group";
+    Charts = [| chart |]
+ }
+
 // helper method to deserialize the json back to object
 let deserialize<'a> (json : string) : 'a =
   let serializer = System.Runtime.Serialization.Json.DataContractJsonSerializer(typedefof<'a>)
@@ -33,16 +39,16 @@ let deserialize<'a> (json : string) : 'a =
   serializer.ReadObject(reader) :?> 'a
 
 [<Fact>]
-let ``should transfer group name to serialized json`` () =
-  test <@ group.Name = (deserialize<Model.Group> (group.ToJson())).Name @>
+let ``should transfer chart name to serialized json`` () =
+  test <@ chart.Name = (deserialize<Model.Chart> (chart.ToJson())).Name @>
 
 [<Fact>]
 let ``should transfer update latency to serialized json`` () =
-  test <@ group.UpdateLatency = (deserialize<Model.Group> (group.ToJson())).UpdateLatency @>
+  test <@ chart.UpdateLatency = (deserialize<Model.Chart> (chart.ToJson())).UpdateLatency @>
 
 [<Fact>]
 let ``should transfer sequence of counters to serialized json`` () =
-  test <@ group.Counters.[0].Name = (deserialize<Model.Group> (group.ToJson())).Counters.[0].Name @>
+  test <@ chart.Counters.[0].Name = (deserialize<Model.Chart> (chart.ToJson())).Counters.[0].Name @>
 
 [<Fact>]
 let ``should transfer category name to serialized json`` () =

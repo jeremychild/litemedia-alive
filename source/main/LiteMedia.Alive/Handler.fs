@@ -51,7 +51,7 @@ type Handler() as this =
         let stream = new MemoryStream()
         let writer = new StreamWriter(stream)
         let serializer = new DataContractSerializer(typedefof<Group[]>)
-        serializer.WriteObject(stream, Configuration.Counters.Model |> Seq.toArray)
+        serializer.WriteObject(stream, Configuration.SectionHandler.Instance.Counters.Model |> Seq.toArray)
         // Reset stream
         stream.Position <- 0L
         document.Load(stream)
@@ -75,9 +75,9 @@ type Handler() as this =
       response.StatusCode <- int (System.Net.HttpStatusCode.InternalServerError)
       response.Write(exn.Message)
 
-    let BuildSingleDataResponse (response : HttpResponse) group =
+    let BuildSingleDataResponse (response : HttpResponse) chart =
       try
-        let result = group |> PerfMon.measureGroup
+        let result = chart |> PerfMon.measureChart
         response.Write(result.ToJson())
       with
         | :? PerfMon.NoSuchPerformanceCounterException as exn -> writeErrorResponse response exn
@@ -92,4 +92,4 @@ type Handler() as this =
                 match context.Request.["file"], context.Request.["data"] with
                 | null, null -> BuildContentResponse context
                 | file, null -> RawResponse context.Response file
-                | null, data -> BuildSingleDataResponse context.Response (Configuration.Counters.Model |> Seq.find (fun g -> g.Name = data))
+                | null, data -> BuildSingleDataResponse context.Response (Configuration.SectionHandler.Instance.Counters.Charts |> Seq.find (fun chart -> chart.Name = data))

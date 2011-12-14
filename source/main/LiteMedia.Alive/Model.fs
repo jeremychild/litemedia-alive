@@ -23,7 +23,7 @@
     }
 
     [<DataContract>]
-    type Group = {
+    type Chart = {
         [<field : DataMember(Name = "Name")>]  
         Name : string
         [<field : DataMember(Name = "UpdateLatency")>]
@@ -32,6 +32,14 @@
         Max : int
         [<field : DataMember(Name = "Counters")>] 
         Counters : Counter[] 
+    }
+
+    [<DataContract>]
+    type Group = {
+      [<field : DataMember(Name = "Name")>]
+      Name : string
+      [<field : DataMember(Name = "Charts")>]
+      Charts : Chart[]
     }
 
     let counterJson (counter : Counter) =
@@ -48,10 +56,10 @@
       System.String.Join(separator, seq |> Seq.toArray)    
 
     /// Get json of group
-    let groupJson (group : Group) =
-      let counters = group.Counters |> Seq.map counterJson |> stringJoin ","
-      sprintf @"{""Counters"":[%s],""Name"":""%s"",""UpdateLatency"":%d}" counters group.Name group.UpdateLatency
+    let chartJson (chart : Chart) =
+      let counters = chart.Counters |> Seq.map counterJson |> stringJoin ","
+      sprintf @"{""Counters"":[%s],""Name"":""%s"",""UpdateLatency"":%d}" counters chart.Name chart.UpdateLatency
 
-    // Extend Group entity with functions
-    type Group with
-      member this.ToJson() = groupJson this
+    // Extend Chart entity with functions
+    type Chart with
+      member this.ToJson() = chartJson this

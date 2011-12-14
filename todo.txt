@@ -1,13 +1,26 @@
 Todo
 ----
 
-# Validating configuration with XSD
-# Web sockets
-# Filter unwanted browsers IE6
-# Helper class for consuming new counters
-# Get counters from another computer
-# Make it configurable to write counter history to database (document it)
-# Store history in client, make it possible to pause and rewind
-# Not average but median
-# Last slash should not be mandatory
+v0.2
 # Solve all warnings
+# Last slash should not be mandatory
+# Make settings columns=3 to matter
+
+v0.3
+# Web socket
+# Make it configurable to write counter history to database (document it)
+
+v0.4
+# Look over all kinds of perf counters
+# Filter unwanted browsers IE6
+# Validating configuration with XSD
+
+v0.5
+# Store history in client, make it possible to pause and rewind
+
+v0.6
+# Add and remove counters in the user interface
+
+v0.7
+# Make it possible to point out critical values where the chart will warn the viewer
+

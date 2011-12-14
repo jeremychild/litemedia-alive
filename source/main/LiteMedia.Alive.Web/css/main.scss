@@ -20,6 +20,16 @@ a {
 	text-decoration: none;
 }
 
+div.group {
+	clear: left;
+	border-color: 3px solid #74A3B0;
+
+	h2 {
+		color: #74A3B0;
+		font-size: 1.2em;
+	}
+}
+
 ul.charts {
 	list-style-type: none;
 	li {

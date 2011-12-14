@@ -1,16 +1,18 @@
-﻿namespace LiteMedia.Alive
+﻿namespace LiteMedia.Alive.Configuration
 
 module Node =
+    [<Literal>]
+    let Section = "alive"
     [<Literal>]
     let Settings = "settings"
     [<Literal>]
     let Counters = "counters"
     [<Literal>] 
-    let Column = "column"
+    let Column = "columns"
     [<Literal>]
     let Group = "group"
     [<Literal>]
-    let Groups = "groups"
+    let Chart = "chart"
     [<Literal>]
     let Name = "name"
     [<Literal>]
@@ -33,8 +35,9 @@ open System.Collections
 open System.Collections.Generic
 open Model
 
-type SettingsSection() =
-    inherit ConfigurationSection()
+/// Settings configuration element
+type Settings() =
+    inherit ConfigurationElement()
 
     [<ConfigurationProperty(Node.Column)>] 
     member self.Columns = self.[Node.Column] :?> string
@@ -77,8 +80,8 @@ type CounterElement() =
         CurrentValue = 0.f;
     }
 
-[<ConfigurationCollection(typedefof<CounterElement>,CollectionType = ConfigurationElementCollectionType.BasicMap,AddItemName = Node.Counter)>]
-type GroupElement() =
+[<ConfigurationCollection(typedefof<Counter>,CollectionType = ConfigurationElementCollectionType.BasicMap,AddItemName = Node.Counter)>]
+type Chart() =
     inherit ConfigurationElementCollection()
     [<DefaultValue>] 
     val mutable name : string
@@ -137,90 +140,131 @@ type GroupElement() =
 
     interface IEnumerable<CounterElement> with
         member self.GetEnumerator() = self.toSeq.GetEnumerator()
-    
+   
 
-[<ConfigurationCollection(typedefof<GroupElement>,CollectionType = ConfigurationElementCollectionType.BasicMap,AddItemName = Node.Group)>]
-type GroupsCollection() =
+[<ConfigurationCollection(typedefof<Chart>,CollectionType = ConfigurationElementCollectionType.BasicMap,AddItemName = Node.Chart)>]
+type Group() =
     inherit ConfigurationElementCollection()
+    [<DefaultValue>] 
+    val mutable name : string
 
     override self.CollectionType = ConfigurationElementCollectionType.BasicMap
-    override self.ElementName = Node.Group
-    override self.CreateNewElement() = new GroupElement() :> ConfigurationElement
-    override self.GetElementKey el = (el :?> GroupElement).Name :> System.Object
+    override self.ElementName = Node.Chart
+    override self.CreateNewElement() = new Chart() :> ConfigurationElement
+    override self.GetElementKey el = (el :?> Chart).Name :> System.Object
+    override self.OnDeserializeUnrecognizedAttribute (name,value) =
+      match name with
+      | Node.Name -> self.name <- value; true
+      | _ -> base.OnDeserializeUnrecognizedAttribute(name, value)
 
     member private self.Add el = base.BaseAdd el
     member self.AddRange elements = elements |> Seq.iter self.Add
 
+    member self.Model = 
+      { 
+        Name = self.Name; 
+        Charts = self.Charts
+      }
+
+    /// Name of the group
+    member self.Name
+      with get ()      = self.name
+      and  set (value) = self.name <- value
+
+    /// This collection counters
+    member self.Charts
+      with get ()      = [| for i in self do yield i.Model |]
+      and  set (value) = value |> Seq.iter self.Add
+
     member self.toSeq = 
         let enumerator = base.GetEnumerator()
-        seq { while enumerator.MoveNext() do yield enumerator.Current :?> GroupElement }
+        seq { while enumerator.MoveNext() do yield enumerator.Current :?> Chart }
 
-    interface IEnumerable<GroupElement> with
+    interface IEnumerable<Chart> with
         member self.GetEnumerator() = self.toSeq.GetEnumerator()
 
-type CountersSection() =
-    inherit ConfigurationSection()
-    
-    /// Charts that contain counters
-    [<ConfigurationProperty(Node.Groups)>]
-    member self.Groups 
-      with get ()      = self.[Node.Groups] :?> GroupsCollection
-      and  set (value) = self.[Node.Groups] <- value
+[<ConfigurationCollection(typedefof<Group>,CollectionType = ConfigurationElementCollectionType.BasicMap,AddItemName = Node.Group)>]
+type Counters() =
+    inherit ConfigurationElementCollection()
 
-    member self.Model = self.Groups |> Seq.map (fun group -> group.Model)
+    override self.CollectionType = ConfigurationElementCollectionType.BasicMap
+    override self.ElementName = Node.Group
+    override self.CreateNewElement() = new Group() :> ConfigurationElement
+    override self.GetElementKey el = (el :?> Group).Name :> System.Object
 
-type Configuration() =
+    member private self.Add el = base.BaseAdd el
+    member self.AddRange elements = elements |> Seq.iter self.Add
+
+    member self.Model = [| for i in self do yield i.Model |]
+
+    // Flattened list of all counters
+    member self.Charts = self.Model |> Seq.collect (fun group -> group.Charts)
+
+    member self.toSeq = 
+        let enumerator = base.GetEnumerator()
+        seq { while enumerator.MoveNext() do yield enumerator.Current :?> Group }
+
+    interface IEnumerable<Group> with
+        member self.GetEnumerator() = self.toSeq.GetEnumerator()
+
+type SectionHandler() =
+  inherit ConfigurationSection()
+
   /// Same as C# ?? operator but with Some/None
   /// Example: Some(1) >>> 2 -> 1
   /// Example: None >>> 2 -> 2
   static let (>>>) a b = match a with | None -> b | _ -> a.Value
 
   // Default counters if no configuration was supplied
-  static let defaultCounters : CountersSection =
-    let result = new CountersSection()
-    let groups = new GroupsCollection()
-    groups.AddRange 
+  static let defaultCounters : Counters =
+    let result = new Counters()
+    let group = new Group(Name = "Main")
+    group.AddRange 
       [|
-        new GroupElement(Name = "Hardware", UpdateLatency = "1000", Counters = 
+        new Chart(Name = "Hardware", UpdateLatency = "1000", Counters = 
           [|
             new CounterElement(Name = "CPU", CategoryName = "Processor Information", CounterName = "% Processor Time", InstanceName = "_Total");
             new CounterElement(Name = "CPU #1", CategoryName = "Processor Information", CounterName = "% Processor Time", InstanceName = "0,0");
             new CounterElement(Name = "CPU #2", CategoryName = "Processor Information", CounterName = "% Processor Time", InstanceName = "0,1")
           |]);
-        new GroupElement(Name = "Memory", UpdateLatency = "5000", Counters = 
+        new Chart(Name = "Memory", UpdateLatency = "5000", Counters = 
           [|
             new CounterElement(Name = "Memory %", CategoryName = "Memory", CounterName = "% Committed Bytes In Use");
             new CounterElement(Name = "Paging File %", CategoryName = "Paging File", CounterName = "% Processor Time", InstanceName = "_Total")
           |]);
-        new GroupElement(Name = "ASP.NET Requests", UpdateLatency = "5000", Counters = 
+        new Chart(Name = "ASP.NET Requests", UpdateLatency = "5000", Counters = 
           [|
             new CounterElement(Name = "Queued", CategoryName = "ASP.NET", CounterName = "Requests Queued")
           |]);
-        new GroupElement(Name = "Connections", UpdateLatency = "5000", Counters = 
+        new Chart(Name = "Connections", UpdateLatency = "5000", Counters = 
           [|
             new CounterElement(Name = "SQL", CategoryName = "ASP.NET Applications", CounterName = "Session SQL Server connections total", InstanceName = "__Total__");
             new CounterElement(Name = "State Server", CategoryName = "ASP.NET Applications", CounterName = "Session State Server connections total", InstanceName = "__Total__")
           |]);
-        new GroupElement(Name = "Errors", UpdateLatency = "5000", Counters =
+        new Chart(Name = "Errors", UpdateLatency = "5000", Counters =
           [|
             new CounterElement(Name = "Requests Failed", CategoryName = "ASP.NET Applications", CounterName = "Requests Failed", InstanceName = "__Total__");
             new CounterElement(Name = "Exceptions", CategoryName = "ASP.NET Applications", CounterName = "Errors During Execution", InstanceName = "__Total__");
             new CounterElement(Name = "Unhandled Exceptions", CategoryName = "ASP.NET Applications", CounterName = "Errors Unhandled During Execution", InstanceName = "__Total__");
           |])
       |]
-    result.Groups <- groups
+    result.AddRange [|group|]
     result
-
-  // No settings at the moment but in the future
-  static let defaultSettings : SettingsSection =
-    new SettingsSection()
 
   /// Return a configuration section of type 'a or None if does not exist
   static member Section<'a> name =  
-    match ConfigurationManager.GetSection("Alive/" + name) with
+    match ConfigurationManager.GetSection(name) with
     | null -> None
     | :? 'a as config -> Some(config)
     | _ -> None
 
-  static member Settings : SettingsSection = (Configuration.Section Node.Settings) >>> defaultSettings
-  static member Counters : CountersSection = (Configuration.Section Node.Counters) >>> defaultCounters
+  static member Instance : SectionHandler = (SectionHandler.Section Node.Section) >>> (new SectionHandler(Counters = defaultCounters))
+
+  [<ConfigurationProperty(Node.Settings)>] 
+  member self.Settings = self.[Node.Settings] :?> Settings
+
+  /// Counter configuration
+  [<ConfigurationProperty(Node.Counters)>]
+  member self.Counters
+    with get ()      = self.[Node.Counters] :?> Counters
+    and  set (value) = self.[Node.Counters] <- value

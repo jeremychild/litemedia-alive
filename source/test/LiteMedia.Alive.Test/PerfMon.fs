@@ -24,8 +24,8 @@ let cpuCounter instance : Model.Counter =
     CurrentValue = 50.f;
   }  
 
-// Hardware group are cpu counters
-let hardwareGroup : Model.Group = 
+// Hardware chart are cpu counters
+let hardwareChart : Model.Chart = 
   { 
     Name = "Hardware";
     UpdateLatency = 1000;
@@ -56,8 +56,8 @@ let ``measure counter async should set counter value to -1. on failure`` () =
   test <@ value.CurrentValue = -1.f @>
 
 [<Fact>]
-let ``measure group should timeout after twice the UpdateLatency time has passed`` () =
+let ``measure chart should timeout after twice the UpdateLatency time has passed`` () =
   let stopwatch = System.Diagnostics.Stopwatch()
   stopwatch.Start() // Some how we should inject a long lasting perf counter here
-  raises<System.TimeoutException> <@ PerfMon.measureGroup hardwareGroup @>
+  raises<System.TimeoutException> <@ PerfMon.measureChart hardwareChart @>
   test <@ stopwatch.ElapsedMilliseconds < 2500L && stopwatch.ElapsedMilliseconds > 2000L @>
