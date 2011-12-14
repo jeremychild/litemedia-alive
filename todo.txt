@@ -2,8 +2,6 @@ Todo
 ----
 
 v0.2
-# Solve all warnings
-# Last slash should not be mandatory
 # Make settings columns=3 to matter
 
 v0.3

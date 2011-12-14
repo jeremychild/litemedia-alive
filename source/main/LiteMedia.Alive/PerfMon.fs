@@ -52,8 +52,8 @@ module PerfMon =
   | PerformanceCounterType.RawFraction // memory
   | _ -> measureAvg
 
-  /// Example: measure 1000 (counterFact "Processor Information" "% Processor Time" (Some("_Total")))
-  let measure time (factory : unit -> PerformanceCounter) =
+  /// Example: doMeasure 1000 (counterFact "Processor Information" "% Processor Time" (Some("_Total")))
+  let doMeasure time (factory : unit -> PerformanceCounter) =
     use counter = factory()
     try
       let result = (measureFn counter.CounterType) time counter
@@ -68,7 +68,7 @@ module PerfMon =
   /// Returns a new counter with updated value
   /// Example: measureCounter 1000 { CategoryName = "Processor Information"; CounterName = "% Processor Time"; InstanceName = Some("_Total"); Name = "CPU"; CurrentValue = 50.f }
   let measureCounter time counter =
-    { counter with CurrentValue = measure time (counterFact counter.CategoryName counter.CounterName counter.InstanceName counter.Machine) }
+    { counter with CurrentValue = doMeasure time (counterFact counter.CategoryName counter.CounterName counter.InstanceName counter.Machine) }
   
   /// Async version of measure the counter
   /// Will set the counter to -1 on failure

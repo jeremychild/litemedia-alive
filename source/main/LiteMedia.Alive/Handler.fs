@@ -28,7 +28,7 @@ type HtmlTextWriter(tw) =
         | true -> base.WriteFullEndElement()
         | false -> base.WriteEndElement()
 
-type Handler() as this =
+type Handler() =
     [<DllImport(@"Kernel32.dll", CallingConvention = CallingConvention.StdCall)>]
     extern void QueryPerformanceCounter (int64 byref)
 
@@ -87,9 +87,8 @@ type Handler() as this =
         member x.IsReusable = false
         
         member x.ProcessRequest(context : HttpContext) =
-            match context.Request.PathInfo with
-            | "/" -> 
-                match context.Request.["file"], context.Request.["data"] with
-                | null, null -> BuildContentResponse context
-                | file, null -> RawResponse context.Response file
-                | null, data -> BuildSingleDataResponse context.Response (Configuration.SectionHandler.Instance.Counters.Charts |> Seq.find (fun chart -> chart.Name = data))
+          match context.Request.["file"], context.Request.["data"] with
+          | null, null -> BuildContentResponse context
+          | file, null -> RawResponse context.Response file
+          | null, data -> BuildSingleDataResponse context.Response (Configuration.SectionHandler.Instance.Counters.Charts |> Seq.find (fun chart -> chart.Name = data))
+          | _, _ -> failwith "Unknown Operation"
