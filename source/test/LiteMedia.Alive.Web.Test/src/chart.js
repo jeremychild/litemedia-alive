@@ -39,9 +39,9 @@
       return Math.log(val) / Math.log(10);
     };
 
-    Chart.prototype.getMax = function(data) {
+    Chart.prototype.getMax = function(data, defaultMax) {
       var ceil, max, n, _i, _len;
-      max = 100;
+      max = defaultMax;
       for (_i = 0, _len = data.length; _i < _len; _i++) {
         n = data[_i];
         max = Math.max(max, n);
@@ -185,7 +185,7 @@
       for (name in data) {
         if (!__hasProp.call(data, name)) continue;
         values = data[name];
-        max = Math.max(max, this.getMax(values));
+        max = Math.max(max, this.getMax(values, this.configuration.max));
       }
       this.gridLines(context, size, max);
       this.gridTitle(context, size, title);

@@ -32,8 +32,8 @@ root.Chart = class Chart
 	# example: getMax [101] -> 250
 	# example: getMax [251] -> 500
 	# example: getMax [501] -> 1000
-	getMax: (data) ->
-		max = 100
+	getMax: (data, defaultMax) ->
+		max = defaultMax
 		for n in data
 			max = Math.max(max, n)
 		ceil = Math.pow(10, Math.ceil(@log10(max)))
@@ -138,7 +138,7 @@ root.Chart = class Chart
 		# calculate max
 		max = @configuration.max
 		for own name, values of data
-			max = Math.max(max, @getMax(values))
+			max = Math.max(max, @getMax(values, @configuration.max))
 		@gridLines(context, size, max)
 		@gridTitle(context, size, title)
 		@gridLegends(context, size, @dataSeries(data))
