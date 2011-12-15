@@ -66,7 +66,7 @@
   root.initialize = function() {
     var canvas, canvases, chart, height, width, _k, _len3, _results;
     canvases = document.getElementsByClassName("chart");
-    width = Math.round(window.innerWidth / 3) - (20 * 3);
+    width = Math.round((window.innerWidth - 90 - (settings.columns * 24)) / settings.columns);
     height = width / 2;
     _results = [];
     for (_k = 0, _len3 = canvases.length; _k < _len3; _k++) {

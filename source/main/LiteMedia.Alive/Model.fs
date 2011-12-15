@@ -1,12 +1,12 @@
 ﻿module Model
     open System.Runtime.Serialization
 
-    let XsltEnableDebug = true
-    let XsltEnableDocumentFunction = true
-    let XsltEnableScript = true
+    let XsltEnableDebug = false
+    let XsltEnableDocumentFunction = false
+    let XsltEnableScript = false
     let IndexTemplate = "Index.xslt"
 
-    [<DataContract>]
+    [<DataContract(Namespace = "http://litemedia.info/2011/12")>]
     type Counter = { 
         [<field : DataMember(Name = "CategoryName")>]
         CategoryName: string
@@ -22,7 +22,7 @@
         CurrentValue : float32
     }
 
-    [<DataContract>]
+    [<DataContract(Namespace = "http://litemedia.info/2011/12")>]
     type Chart = {
         [<field : DataMember(Name = "Name")>]  
         Name : string
@@ -34,12 +34,26 @@
         Counters : Counter[] 
     }
 
-    [<DataContract>]
+    [<DataContract(Namespace = "http://litemedia.info/2011/12")>]
     type Group = {
       [<field : DataMember(Name = "Name")>]
       Name : string
       [<field : DataMember(Name = "Charts")>]
       Charts : Chart[]
+    }
+
+    [<DataContract(Namespace = "http://litemedia.info/2011/12")>]
+    type Settings = {
+      [<field : DataMember(Name = "Columns")>]
+      Columns : int
+    }
+
+    [<DataContract(Namespace = "http://litemedia.info/2011/12")>]
+    type XmlDocumentData = {
+      [<field : DataMember(Name = "Groups")>]
+      Groups : Group[];
+      [<field : DataMember(Name = "Settings")>]
+      Settings : Settings        
     }
 
     let counterJson (counter : Counter) =

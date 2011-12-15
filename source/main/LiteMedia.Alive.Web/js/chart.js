@@ -11,6 +11,7 @@
       this.configuration = configuration;
       this.base_color = this.settings.base_color;
       this.graph_colors = this.settings.graph_colors;
+      this.columns = this.settings.columns;
       this.padding = 5;
       this.legend_size = 12;
       this.label_font = '8.5 pt Arial';

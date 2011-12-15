@@ -46,12 +46,18 @@ type Handler() =
         | null -> None
         | value -> Some value
 
+
     let BuildContentResponse (context : HttpContext) =
+        let data = { 
+          Groups = (Configuration.SectionHandler.Instance.Counters.Model |> Seq.toArray); 
+          Settings = Configuration.SectionHandler.Instance.Settings.Model 
+        }
+
         let document = new System.Xml.XmlDocument()
         let stream = new MemoryStream()
         let writer = new StreamWriter(stream)
-        let serializer = new DataContractSerializer(typedefof<Group[]>)
-        serializer.WriteObject(stream, Configuration.SectionHandler.Instance.Counters.Model |> Seq.toArray)
+        let serializer = new DataContractSerializer(typedefof<XmlDocumentData>)
+        serializer.WriteObject(stream, data)
         // Reset stream
         stream.Position <- 0L
         document.Load(stream)

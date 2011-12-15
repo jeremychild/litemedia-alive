@@ -7,6 +7,7 @@ root.Chart = class Chart
 	constructor: (@settings, @configuration) ->
 		@base_color = @settings.base_color
 		@graph_colors = @settings.graph_colors
+		@columns = @settings.columns
 		@padding = 5 #px
 		@legend_size = 12 #px
 		@label_font = '8.5 pt Arial'

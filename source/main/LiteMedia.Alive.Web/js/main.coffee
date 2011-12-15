@@ -38,7 +38,7 @@ for worker in workers
 root.initialize = () ->
 	# set width * height of charts
 	canvases = document.getElementsByClassName("chart");
-	width = Math.round(window.innerWidth / 3) - (20 * 3);
+	width = Math.round((window.innerWidth - 90 - (settings.columns * 24)) / settings.columns);
 	height = width / 2
 	for canvas in canvases
 		canvas.width = width

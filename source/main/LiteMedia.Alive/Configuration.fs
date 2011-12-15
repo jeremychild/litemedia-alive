@@ -35,12 +35,19 @@ open System.Collections
 open System.Collections.Generic
 open Model
 
+module Util = 
+  let intParse = System.Int32.Parse
+
 /// Settings configuration element
 type Settings() =
     inherit ConfigurationElement()
 
     [<ConfigurationProperty(Node.Column)>] 
     member self.Columns = self.[Node.Column] :?> string
+
+    member self.Model = {
+      Columns = Util.intParse(self.Columns)
+    }
 
 /// Counter configurations
 type CounterElement() =
@@ -100,8 +107,6 @@ type Chart() =
       | Node.UpdateLatency -> self.updateLatency <- value; true
       | Node.Max -> self.max <- value; true
       | _ -> base.OnDeserializeUnrecognizedAttribute(name, value)
-
-    let intParse = System.Int32.Parse
     
     /// Name of the group
     member self.Name
@@ -129,8 +134,8 @@ type Chart() =
     member self.Model = 
       { 
         Name = self.Name; 
-        UpdateLatency = intParse(self.UpdateLatency); 
-        Max = intParse(self.Max);
+        UpdateLatency = Util.intParse(self.UpdateLatency); 
+        Max = Util.intParse(self.Max);
         Counters = self.Counters
       }
 
