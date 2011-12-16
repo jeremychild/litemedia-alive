@@ -28,7 +28,7 @@ root.Chart = class Chart
 	# good enough log10 function
 	log10: (val) -> Math.log(val) / Math.log(10)
 
-	# get max value of graph, 100 is minimal
+	# get max value of graph, defaultMax is minimal
 	# example: getMax [99] -> 100
 	# example: getMax [101] -> 250
 	# example: getMax [251] -> 500
@@ -38,7 +38,10 @@ root.Chart = class Chart
 		for n in data
 			max = Math.max(max, n)
 		ceil = Math.pow(10, Math.ceil(@log10(max)))
-		if (ceil / 4) > max 
+		# max is unchanged
+		if defaultMax == max
+			max
+		else if (ceil / 4) > max 
 			ceil / 4 
 		else if (ceil / 2) > max
 			ceil / 2

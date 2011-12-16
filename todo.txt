@@ -2,7 +2,7 @@ Todo
 ----
 
 v0.2
-# Make settings columns=3 to matter
+# Completed
 
 v0.3
 # Web socket
