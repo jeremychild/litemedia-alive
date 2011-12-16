@@ -1,30 +1,34 @@
 <configuration>
 	<configSections>
-		<sectionGroup name="Alive" type="LiteMedia.Alive.Configuration, Alive">
-			<section name="settings" type="LiteMedia.Alive.SettingsSection, Alive"/>
-			<section name="counters" type="LiteMedia.Alive.CountersSection, Alive"/>
-		</sectionGroup>
+		<section name="alive" type="LiteMedia.Alive.Configuration.SectionHandler, Alive" />
 	</configSections>	
 	
-	<Alive>
-		<settings columns="3" />
-		<counters>
-			<groups>
-				<group name="Hardware" updateLatency="1000">
-					<counter name="CPU" categoryName="Processor" counterName="% Processor Time" instanceName="_Total" />
-					<counter name="Memory" categoryName="Memory" counterName="Pages/sec" />
-				</group>
-				<group name="Memory" updateLatency="5000">
-					<counter name="RAM" categoryName="Memory" counterName="% Committed Bytes In Use" />
-					<counter name="Page file" categoryName="Paging File" counterName="% Usage" instanceName="_Total" />
-				</group>
-				<group name="ASP.NET Requests" updateLatency="1000">
-					<counter name="Requests/sec" categoryName="ASP.NET Applications" counterName="Requests/Sec" instanceName="__Total__"/>
-				</group>
-			</groups>
-		</counters>
-	</Alive>
-
+  <alive>
+    <settings columns="3" />
+    <counters>
+      <group name="Hardware">
+        <chart name="CPU" updateLatency="1000">
+          <counter name="CPU" categoryName="Processor" counterName="% Processor Time" instanceName="_Total" />
+        </chart>
+		<chart name="Memory Activity" updateLatency="1000">
+		  <counter name="Memory" categoryName="Memory" counterName="Pages/sec" />
+		</chart>
+        <chart name="Memory Usage" updateLatency="5000">
+          <counter name="RAM" categoryName="Memory" counterName="% Committed Bytes In Use" />
+          <counter name="Page file" categoryName="Paging File" counterName="% Usage" instanceName="_Total" />
+        </chart>
+	  </group>
+	  <group name="IIS">
+        <chart name="ASP.NET Performance" updateLatency="1000">
+          <counter name="Requests/sec" categoryName="ASP.NET Applications" counterName="Requests/Sec" instanceName="__Total__" />
+        </chart>
+		<chart name="Session state server" updateLatency="5000">
+		  <counter name="Active" categoryName="ASP.NET" counterName="State Server Sessions Active" />
+		</chart>
+      </group>
+    </counters>
+  </alive>
+  
 	<system.web>
   	  <httpHandlers>
 	    <add path="Alive.axd" verb="*" type="LiteMedia.Alive.Handler, Alive"/>
